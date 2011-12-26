@@ -6,6 +6,7 @@ Replace these with more appropriate tests for your application.
 """
 
 from django.test import TestCase
+from SiteLeak.leak.models import *
 
 class SimpleTest(TestCase):
     def test_basic_addition(self):
@@ -14,11 +15,5 @@ class SimpleTest(TestCase):
         """
         self.failUnlessEqual(1 + 1, 2)
 
-__test__ = {"doctest": """
-Another way to test that 1 + 1 is equal to 2.
-
-
->>> 1 + 1 == 2
-True
-"""}
-
+user = User(username='test',password='test',email='test@test.com',source='test')
+user.save()
