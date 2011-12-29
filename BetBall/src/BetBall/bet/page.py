@@ -5,6 +5,7 @@ import os
 import sys
 import md5
 import json
+import random
 from weibo import APIClient
 from django.template import Context, loader,RequestContext
 from django.db.models import Q
@@ -99,13 +100,31 @@ def viewMatch(request):
     return HttpResponse(t.render(c))
 
 def gologin(request):
-    c = Context({}) 
+    n1 = random.randint(0,9)
+    n2 = random.randint(0,9)
+    result=0
+    op = ''
+    if n1%3==0:
+        result = n1+n2
+        op = str(n1)+'+'+str(n2)+'='
+    if n1%3==1:
+        result = n1-n2
+        op = str(n1)+'-'+str(n2)+'='
+    if n1%3==2:
+        result = n1*n2
+        op = str(n1)+'*'+str(n2)+'='
+    request.session['result']=result
+    c = Context({'op':op}) 
     t = loader.get_template('login.htm')
     return HttpResponse(t.render(c))
 
 def login(request):  
     m = Gambler.objects.filter(eid=request.POST['username'])      
     pwd = md5.new(request.POST['password'])
+    r = request.POST['result']
+    result = request.session['result']
+    if r!=str(result):
+        return result("Wrong answer!")
     pwd.digest()
     if len(m)!=0:
         if  m[0].password == pwd.hexdigest():
@@ -497,3 +516,5 @@ def addMatch(request):
     
 def setSession(c,request):
     c['session']=request.session
+    
+    
