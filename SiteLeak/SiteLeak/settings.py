@@ -1,5 +1,5 @@
 # Django settings for SiteLeak project.
-
+import os
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
@@ -78,6 +78,7 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'SiteLeak.urls'
 
 TEMPLATE_DIRS = (
+    os.path.dirname(__file__)+'/html',
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
