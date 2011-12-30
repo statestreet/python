@@ -5,6 +5,7 @@ Created on 2011-12-26
 @author: yixiugg
 '''
 from SiteLeak.leak.models import User
+import gc
 
 #load from tianya
 #f=open('C:/kuaipan/tianya/tianya_1.txt','r')
@@ -28,6 +29,7 @@ from SiteLeak.leak.models import User
 #    else:
 #        fName='00'+str(i)
 for i in range(1, 15):
+    gc.disable()
     if i>9:
         fName='0'+str(i)
     else:
@@ -40,3 +42,5 @@ for i in range(1, 15):
                 user.save()
             except:  
                 print "Error-> "+line  
+            del line
+    gc.enable()
