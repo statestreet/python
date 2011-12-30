@@ -27,16 +27,16 @@ from SiteLeak.leak.models import User
 #        fName='0'+str(i)
 #    else:
 #        fName='00'+str(i)
-for i in range(1, 14):
+for i in range(1, 15):
     if i>9:
         fName='0'+str(i)
     else:
         fName='00'+str(i)
-    f=open('/home/yixiugg/dev/db/csdn/www.csdn.net.sql.'+fName,'r')
-    for line in f.read().split('\n'):
-        try:
-            arr =  line.replace('\r','').split("#")
-            user = User(username=arr[0].strip(),password=arr[1].strip(),email=arr[2].strip(),source='csdn')
-            user.save()
-        except:  
-            print "Error-> "+line  
+    with open('/home/yixiugg/dev/db/csdn/www.csdn.net.sql.'+fName,'r') as f:
+        for line in f:
+            try:
+                arr =  line.replace('\r','').split("#")
+                user = User(username=arr[0].strip(),password=arr[1].strip(),email=arr[2].strip(),source='csdn')
+                user.save()
+            except:  
+                print "Error-> "+line  
