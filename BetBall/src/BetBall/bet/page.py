@@ -26,7 +26,22 @@ SITE_URL = 'http://www.noya35.com'
 def listTodayMatches(request):    
     gambler =  request.session.get('gambler')
     if gambler is None:
-        c = Context({}) 
+        n1 = random.randint(0,9)
+        n2 = random.randint(0,9)
+        result=0
+        op = ''
+        if n1%3==0:
+            result = n1+n2
+            op = str(n1)+'+'+str(n2)+'='
+        if n1%3==1:
+            result = n1-n2
+            op = str(n1)+'-'+str(n2)+'='
+        if n1%3==2:
+            result = n1*n2
+            op = str(n1)+'*'+str(n2)+'='
+        request.session['result']=result
+        request.session['op']=op
+        c = Context({'session':request.session}) 
         t = loader.get_template('login.htm')
         return HttpResponse(t.render(c))
     else:
@@ -122,8 +137,8 @@ def login(request):
     m = Gambler.objects.filter(eid=request.POST['username'])      
     pwd = md5.new(request.POST['password'])
     r = request.POST['result']
-    result = request.session['result']
-    if r!=str(result):
+    sr = request.session['result']
+    if r!=str(sr):
         return result("Wrong answer!")
     pwd.digest()
     if len(m)!=0:
