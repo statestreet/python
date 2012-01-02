@@ -28,7 +28,7 @@ import gc
 #        fName='0'+str(i)
 #    else:
 #        fName='00'+str(i)
-for i in range(1, 15):
+for i in range(1, 6):
     gc.disable()
     if i>9:
         fName='0'+str(i)
