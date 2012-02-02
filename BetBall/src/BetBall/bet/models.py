@@ -1,4 +1,5 @@
 from django.db import models
+
 class Gambler(models.Model):
     eid = models.CharField(max_length=7)
     name = models.CharField(max_length=20)
@@ -9,22 +10,46 @@ class Gambler(models.Model):
     weibo = models.CharField(max_length=32)
     weibo_nick = models.CharField(max_length=50)
 
+class Friend(models.Model):
+    gambler = models.ForeignKey(Gambler,related_name='gambler')
+    friend = models.ForeignKey(Gambler,related_name='friend')
+    state = models.IntegerField(0)
+    name = models.CharField(max_length=20)
+    
+class Lega(models.Model):
+    gambler = models.ForeignKey(Gambler)
+    name = models.CharField(max_length=20)
+    logo = models.CharField(max_length=200)
+
+class Wager(models.Model):
+    gambler = models.ForeignKey(Gambler)
+    name = models.CharField(max_length=20)
+    
 class Recharge(models.Model):
     gambler = models.ForeignKey(Gambler)
     amount = models.IntegerField(4)
     chargetime = models.DateTimeField()
     
 class Match(models.Model):
+    lega = models.ForeignKey(Lega)
+    wager = models.ForeignKey(Wager)
     matchdate = models.DateField()
     matchtime = models.DateTimeField() 
     hometeam = models.CharField(max_length=50)
     awayteam = models.CharField(max_length=50)
-    lega = models.CharField(max_length=50)
     final = models.CharField(max_length=50)
     state = models.CharField(max_length=1)
     result = models.CharField(max_length=5)
-    gettime = models.DateField() 
+    gettime = models.DateField()
 
+class Group(models.Model):
+    gambler = models.ForeignKey(Gambler)
+    name = models.CharField(max_length=20)
+    
+class Member(models.Model):
+    group = models.ForeignKey(Group)
+    gambler = models.ForeignKey(Gambler)
+    
 class Transaction(models.Model):
     gambler = models.ForeignKey(Gambler)
     bettime = models.DateTimeField()
@@ -43,5 +68,6 @@ class Admin(models.Model):
     password = models.CharField(max_length=50)
     weibo = models.CharField(max_length=32)
     weibo_nick = models.CharField(max_length=50)
+
 
     
