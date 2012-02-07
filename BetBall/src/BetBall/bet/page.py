@@ -134,7 +134,7 @@ def gologin(request):
     return HttpResponse(t.render(c))
 
 def login(request):  
-    m = Gambler.objects.filter(eid=request.POST['username'])      
+    m = Gambler.objects.filter(username=request.POST['username'])      
     pwd = md5.new(request.POST['password'])
     r = request.POST['result']
     sr = request.session['result']
@@ -206,7 +206,7 @@ def weiboLoginBack(request):
     return HttpResponseRedirect("/") 
 
 def bind(request): 
-    m = Gambler.objects.filter(eid=request.POST['username'])      
+    m = Gambler.objects.filter(username=request.POST['username'])      
     pwd = md5.new(request.POST['password'])
     pwd.digest()
     if len(m)!=0:
@@ -231,23 +231,30 @@ def register(request):
     return HttpResponse(t.render(c))
     
 def saveRegister(request):  
-    username = request.POST['username']
-    weibo = request.session['weibo']
-    if username is None:
-        c = Context({}) 
-        t = loader.get_template('register.htm')
-        return HttpResponse(t.render(c))      
-    pwd = md5.new(request.POST['password'])
-    if request.POST['password']!=request.POST['password1']:
-        return result("Password didn't match.")
-    u = Gambler.objects.filter(eid=username)
-    if len(u)>0:
-        return result("Username exsited.")
+    username = request.POST['username'].strip()
+    email = request.POST['email'].strip()
+    if validateEmail(request.POST['email']):
+        weibo = request.session['weibo']
+        if username is None:
+            c = Context({}) 
+            t = loader.get_template('register.htm')
+            return HttpResponse(t.render(c))      
+        pwd = md5.new(request.POST['password'])
+        if request.POST['password']!=request.POST['password1']:
+            return result("Password didn't match.")
+        u = Gambler.objects.filter(username=username)
+        if len(u)>0:
+            return result("Username exsited.")
+        u = Gambler.objects.filter(email=email)
+        if len(u)>0:
+            return result("Email exsited.")
+        else:
+            name = request.POST['name']
+            gambler = Gambler(name=name,username=username,weibo=weibo,password=pwd.hexdigest(),state='0',regtime=datetime.datetime.now(),balance=0)
+            gambler.save()
+            return result("Please wait for admin to approve your register.")
     else:
-        name = request.POST['name']
-        gambler = Gambler(name=name,eid=username,weibo=weibo,password=pwd.hexdigest(),state='0',regtime=datetime.datetime.now(),balance=0)
-        gambler.save()
-        return result("Please wait for admin to approve your register.")
+        return result("Email not valid.")
 
 def recharge(request):  
     c = Context({}) 
@@ -532,4 +539,9 @@ def addMatch(request):
 def setSession(c,request):
     c['session']=request.session
     
-    
+def validateEmail(email):
+    if len(email) > 6:
+        if re.match('\b[\w\.-]+@[\w\.-]+\.\w{2,4}\b', email) != None:
+            return 1
+    return 0
+  

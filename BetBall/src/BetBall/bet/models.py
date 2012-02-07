@@ -1,11 +1,13 @@
 from django.db import models
 
 class Gambler(models.Model):
-    eid = models.CharField(max_length=7)
+    username = models.CharField(max_length=20)
     name = models.CharField(max_length=20)
     balance = models.IntegerField(4)
     state = models.CharField(max_length=1)
+    code = models.CharField(max_length=32)
     regtime = models.DateTimeField()
+    email=models.CharField(max_length=100)
     password= models.CharField(max_length=32)
     weibo = models.CharField(max_length=32)
     weibo_nick = models.CharField(max_length=50)
@@ -69,5 +71,24 @@ class Admin(models.Model):
     weibo = models.CharField(max_length=32)
     weibo_nick = models.CharField(max_length=50)
 
+class Vote(models.Model):
+    gambler = models.ForeignKey(Gambler)
+    votedate = models.DateTimeField()
+    name = models.CharField(max_length=100)
+    score = models.DecimalField
+    memo = models.CharField(max_length=500)
+    
+class VoteColumn(models.Model):
+    vote = models.ForeignKey(Vote)
+    name = models.CharField(max_length=100)
+    
+class VoteDetail(models.Model):
+    gambler = models.ForeignKey(Gambler)
+    vote = models.ForeignKey(Vote)
+    votecolumn = models.ForeignKey(VoteColumn)
+    votetime = models.DateTimeField()
+    score = models.DecimalField
+    memo = models.CharField(max_length=500)
+    
 
     
