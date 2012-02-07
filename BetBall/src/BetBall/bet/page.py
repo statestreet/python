@@ -544,4 +544,13 @@ def validateEmail(email):
         if re.match('\b[\w\.-]+@[\w\.-]+\.\w{2,4}\b', email) != None:
             return 1
     return 0
-  
+ 
+def getUsername(request):  
+    c = Context({}) 
+    t = loader.get_template('get_username.htm')
+    return HttpResponse(t.render(c))
+    
+def getPassword(request):  
+    c = Context({}) 
+    t = loader.get_template('get_password.htm')
+    return HttpResponse(t.render(c))
