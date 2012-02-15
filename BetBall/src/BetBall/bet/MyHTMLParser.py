@@ -1,3 +1,4 @@
+#coding=utf-8
 '''
 Created on Mar 22, 2011
 
@@ -5,7 +6,7 @@ Created on Mar 22, 2011
 '''
 from HTMLParser import HTMLParser
 import urllib   
-
+import re
 
 class MyHtmlParser(HTMLParser):
     '''
@@ -26,14 +27,14 @@ class MyHtmlParser(HTMLParser):
     def handle_starttag(self, tag, attrs):
         if tag == "td":
             for name,value in attrs:
-                if name == "style" and value.index("background-color:") != -1:
+                if name == "style" and value.find("background-color:") != -1:
                   
                     if(self.v != ""):
                         list = self.v.split(",")[0:18]
                         target = ""
                         for str in list :
                             target += str + ","
-                            if str ==  '\xe7\x9b\x98\xe8\xb7\xaf':
+                            if str ==  '盘路':
                                 d = self.date[5:7] +"-"+self.date[10:12]
                                 if(self.flag == 0): 
                                     self.date = self.pirorDate
@@ -42,7 +43,7 @@ class MyHtmlParser(HTMLParser):
                                 break
                         self.result.append(target)
                         self.v = ""
-                        
+
                     self.flag = 1;
         if tag == "caption":
             self.flag = 0
@@ -50,8 +51,13 @@ class MyHtmlParser(HTMLParser):
                        
 
     def handle_data(self,data):
+        if re.match('\[\d+\]',data) :
+            return
         if self.flag == 1:
-            if data.strip() != "":
+            if data and data.find('vs') != -1:
+                self.v += data
+                return
+            if data.strip() != "" :
                 self.v += data + ","
         if self.caption == 1:
             self.pirorDate = data
@@ -63,8 +69,8 @@ class MyHtmlParser(HTMLParser):
             self.caption = 0;
                 
     def getListFromUrl(self,url):
-        #sock = urllib.urlopen(url, proxies={'http' : 'http://proxy.statestr.com:80'}) 
-        sock = urllib.urlopen(url) 
+        sock = urllib.urlopen(url, proxies={'http' : 'http://proxy.statestr.com:80'}) 
+        #sock = urllib.urlopen(url) 
         htm = sock.read()    
         htm = unicode(htm, 'gb2312','ignore').encode('utf-8','ignore')
         self.feed(htm)
