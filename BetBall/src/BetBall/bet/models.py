@@ -74,6 +74,8 @@ class Admin(models.Model):
 class Vote(models.Model):
     gambler = models.ForeignKey(Gambler)
     votedate = models.DateTimeField()
+    deadline = models.DateTimeField()
+    state = models.CharField(max_length=2)
     name = models.CharField(max_length=100)
     score = models.DecimalField
     memo = models.CharField(max_length=500)
@@ -81,6 +83,7 @@ class Vote(models.Model):
 class VoteColumn(models.Model):
     vote = models.ForeignKey(Vote)
     name = models.CharField(max_length=100)
+    score = models.DecimalField
     
 class VoteDetail(models.Model):
     gambler = models.ForeignKey(Gambler)
