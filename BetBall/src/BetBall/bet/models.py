@@ -4,7 +4,7 @@ class Gambler(models.Model):
     username = models.CharField(max_length=20)
     name = models.CharField(max_length=20)
     balance = models.IntegerField(4)
-    state = models.CharField(max_length=1)
+    state = models.CharField(max_length=2)
     code = models.CharField(max_length=32)
     regtime = models.DateTimeField()
     email=models.CharField(max_length=100)
@@ -16,7 +16,7 @@ class Gambler(models.Model):
 class Friend(models.Model):
     gambler = models.ForeignKey(Gambler,related_name='gambler')
     friend = models.ForeignKey(Gambler,related_name='friend')
-    state = models.IntegerField(0)
+    state = models.CharField(max_length=2)
     name = models.CharField(max_length=20)
     
 class Lega(models.Model):
@@ -41,7 +41,7 @@ class Match(models.Model):
     hometeam = models.CharField(max_length=50)
     awayteam = models.CharField(max_length=50)
     final = models.CharField(max_length=50)
-    state = models.CharField(max_length=1)
+    state = models.CharField(max_length=2)
     result = models.CharField(max_length=5)
     gettime = models.DateField()
 
@@ -59,7 +59,7 @@ class Transaction(models.Model):
     bet = models.IntegerField(4)
     match = models.ForeignKey(Match)
     result = models.CharField(max_length=1)
-    state = models.CharField(max_length=1)
+    state = models.CharField(max_length=2)
     
 class Position(models.Model):
     match = models.ForeignKey(Match)
