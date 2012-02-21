@@ -11,6 +11,7 @@ class Gambler(models.Model):
     password= models.CharField(max_length=32)
     weibo = models.CharField(max_length=32)
     weibo_nick = models.CharField(max_length=50)
+    internal = models.IntegerField(1)
 
 class Friend(models.Model):
     gambler = models.ForeignKey(Gambler,related_name='gambler')
@@ -83,7 +84,7 @@ class VoteColumn(models.Model):
     name = models.CharField(max_length=100)
     
 class VoteDetail(models.Model):
-    gambler = models.ForeignKey(Gambler)
+    voter = models.ForeignKey(Gambler)
     vote = models.ForeignKey(Vote)
     votecolumn = models.ForeignKey(VoteColumn)
     votetime = models.DateTimeField()
