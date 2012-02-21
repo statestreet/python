@@ -7,7 +7,7 @@ Created on 2011-3-22
 import threading
 import datetime
 from BetBall.bet.MyHTMLParser import MyHtmlParser
-from BetBall.bet.models import Match
+from BetBall.bet.models import *  
 
 class BetTimer():
     '''
