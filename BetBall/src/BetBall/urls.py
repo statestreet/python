@@ -1,5 +1,7 @@
 from django.conf.urls.defaults import *
 from BetBall.bet.page import *
+from BetBall.bet.adminpage import *
+from BetBall.bet.weibopage import *
 import os
 import settings
 
