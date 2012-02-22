@@ -19,21 +19,7 @@ class AuthMiddleware(object):
         if request.path == '/' or request.path == '/mybet/' or request.path == '/myaccount/': 
             gambler =  request.session.get('gambler')
             if gambler is None:
-                n1 = random.randint(0,9)
-                n2 = random.randint(0,9)
-                result=0
-                op = ''
-                if n1%3==0:
-                    result = n1+n2
-                    op = str(n1)+'+'+str(n2)+'='
-                if n1%3==1:
-                    result = n1-n2
-                    op = str(n1)+'-'+str(n2)+'='
-                if n1%3==2:
-                    result = n1*n2
-                    op = str(n1)+'*'+str(n2)+'='
-                request.session['result']=result
-                c = Context({'op':op}) 
+                c = Context({}) 
                 t = loader.get_template('login.htm')
                 return HttpResponse(t.render(c))
             else:

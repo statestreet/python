@@ -49,6 +49,7 @@ urlpatterns = patterns('',
      (r'^bind/', bind),
      (r'^getPassword/', getPassword),
      (r'^getUsername/', getUsername),
+     (r'^verifyImg/', verifyImg),
      (r'^refreshMatches/', refreshMatches),
      (r'^image/(?P<path>.*)$', 'django.views.static.serve', {'document_root': os.path.dirname(globals()["__file__"]) + '/image'}),
      (r'^files/(?P<path>.*)$', 'django.views.static.serve', {'document_root': os.path.dirname(globals()["__file__"]) + '/html/files'})

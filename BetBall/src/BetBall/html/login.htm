@@ -6,8 +6,14 @@
 <meta name="description" content="Default Description" />
 <meta name="keywords" content="Magento, Varien, E-commerce" />
 <meta name="robots" content="INDEX,FOLLOW" />
+<script type="text/javascript" src="/image/jquery.min.js"></script>
 <script type="text/javascript">
-	
+	$(document).ready(function(){
+		$("#changeVefifyImg").click(function(){
+				$('#verifyImg').attr('src','/verifyImg?code='+Math.random());
+			}
+		);
+	});
 </script>
 
 <link rel="stylesheet" type="text/css" href="/image/reset.css"
@@ -47,9 +53,9 @@
 			</td>
 		</tr>
 		<tr>
-			<td><label for="result"> {{session.op}}</label> <input
+			<td><label for="result"><img id="verifyImg" src="/verifyImg"/></label> <input
 				name="result" id="result"
-				class="input-text required-entry" type="text" />
+				class="input-text required-entry" type="text" style="width:20px"/>&nbsp; <a id="changeVefifyImg" href="#">change</a>
 			</td>
 		</tr>
 		<tr>

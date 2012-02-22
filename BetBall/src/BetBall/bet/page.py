@@ -12,6 +12,7 @@ from django.db.models import Q
 from django.http import *
 from BetBall.bet.timer import *
 from BetBall.bet.models import *  
+import random, Image, ImageDraw, ImageFont, md5, datetime, ImageColor, StringIO
 
 #APP_KEY = '3118024522' # app key of betball
 #APP_SECRET = '95895b5b4556994a798224902af57d30' # app secret of betball
@@ -26,21 +27,6 @@ SITE_URL = 'http://www.noya35.com'
 def listTodayMatches(request):    
     gambler =  request.session.get('gambler')
     if gambler is None:
-        n1 = random.randint(0,9)
-        n2 = random.randint(0,9)
-        result=0
-        op = ''
-        if n1%3==0:
-            result = n1+n2
-            op = str(n1)+'+'+str(n2)+'='
-        if n1%3==1:
-            result = n1-n2
-            op = str(n1)+'-'+str(n2)+'='
-        if n1%3==2:
-            result = n1*n2
-            op = str(n1)+'*'+str(n2)+'='
-        request.session['result']=result
-        request.session['op']=op
         c = Context({'session':request.session}) 
         t = loader.get_template('login.htm')
         return HttpResponse(t.render(c))
@@ -76,31 +62,18 @@ def viewMatch(request):
     return HttpResponse(t.render(c))
 
 def gologin(request):
-    n1 = random.randint(0,9)
-    n2 = random.randint(0,9)
-    result=0
-    op = ''
-    if n1%3==0:
-        result = n1+n2
-        op = str(n1)+'+'+str(n2)+'='
-    if n1%3==1:
-        result = n1-n2
-        op = str(n1)+'-'+str(n2)+'='
-    if n1%3==2:
-        result = n1*n2
-        op = str(n1)+'*'+str(n2)+'='
-    request.session['result']=result
-    c = Context({'op':op}) 
+    c = Context({}) 
     t = loader.get_template('login.htm')
     return HttpResponse(t.render(c))
 
 def login(request):  
-    m = Gambler.objects.filter(username=request.POST['username'])      
-    pwd = md5.new(request.POST['password'])
     r = request.POST['result']
     sr = request.session['result']
     if r!=str(sr):
         return result("Wrong answer!")
+    username = request.POST['username']
+    m = Gambler.objects.filter(username=username)      
+    pwd = md5.new(request.POST['password'])
     pwd.digest()
     if len(m)!=0:
         if  m[0].password == pwd.hexdigest():
@@ -300,7 +273,6 @@ def viewMatchBets(request,id):
     t = loader.get_template('match_bet.htm')
     return HttpResponse(t.render(c))
 
-    
 def setSession(c,request):
     c['session']=request.session
     
@@ -319,3 +291,32 @@ def getPassword(request):
     c = Context({}) 
     t = loader.get_template('get_password.htm')
     return HttpResponse(t.render(c))
+
+def verifyImg(request):
+    n1 = random.randint(0,9)
+    n2 = random.randint(0,9)  
+    op = ''
+    if n1%3==0:
+        result = n1+n2
+        op = str(n1)+'+'+str(n2)+'='
+    if n1%3==1:
+        result = n1-n2
+        op = str(n1)+'-'+str(n2)+'='
+    if n1%3==2:
+        result = n1*n2
+        op = str(n1)+'*'+str(n2)+'='
+    request.session['result']=result
+    #创建一个IO流对象  
+    mstream=StringIO.StringIO()  
+    #这是我想要从querystring中获取的显示图片的字符（如果想要图片验证，则加密它，注意我没有使用session存储这个需要显示的字符串，因为session消耗资源太大）  
+    q = list(op)
+    #我这里演示的是直接产生的字符串，实际中需要加入噪音线  
+    im = Image.new("RGBA", (80, 20),color=127*122)  
+    draw = ImageDraw.Draw(im, "RGBA")  
+    draw.ink = 255  
+    draw.text((5,0), q[0],font=ImageFont.truetype("ARIAL.TTF", 18))  
+    draw.text((20,0), q[1],font=ImageFont.truetype("ARIAL.TTF", 18))  
+    draw.text((35,0), q[2],font=ImageFont.truetype("ARIAL.TTF", 18))  
+    draw.text((50,0), q[3],font=ImageFont.truetype("ARIAL.TTF", 18))  
+    im.save(mstream,"JPEG")  
+    return HttpResponse(mstream.getvalue(),"image/jpg")  
