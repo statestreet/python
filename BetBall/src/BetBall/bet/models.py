@@ -5,13 +5,13 @@ class Gambler(models.Model):
     name = models.CharField(max_length=20)
     balance = models.IntegerField(4)
     state = models.CharField(max_length=2)
-    code = models.CharField(max_length=32)
+    code = models.CharField(max_length=32,null=True)
     regtime = models.DateTimeField()
     email=models.CharField(max_length=100)
     password= models.CharField(max_length=32)
-    weibo = models.CharField(max_length=32)
-    weibo_nick = models.CharField(max_length=50)
-    internal = models.IntegerField(1)
+    weibo = models.CharField(max_length=32,null=True)
+    weibo_nick = models.CharField(max_length=50,null=True)
+    internal = models.IntegerField(1,null=True)
 
 class Friend(models.Model):
     gambler = models.ForeignKey(Gambler,related_name='gambler')
@@ -40,9 +40,9 @@ class Match(models.Model):
     matchtime = models.DateTimeField() 
     hometeam = models.CharField(max_length=50)
     awayteam = models.CharField(max_length=50)
-    final = models.CharField(max_length=50)
+    final = models.CharField(max_length=50,null=True)
     state = models.CharField(max_length=2)
-    result = models.CharField(max_length=5)
+    result = models.CharField(max_length=5,null=True)
     gettime = models.DateField()
 
 class Group(models.Model):
@@ -69,8 +69,8 @@ class Position(models.Model):
 class Admin(models.Model):
     username = models.CharField(max_length=50)
     password = models.CharField(max_length=50)
-    weibo = models.CharField(max_length=32)
-    weibo_nick = models.CharField(max_length=50)
+    weibo = models.CharField(max_length=32,null=True)
+    weibo_nick = models.CharField(max_length=50,null=True)
 
 class Vote(models.Model):
     gambler = models.ForeignKey(Gambler)
@@ -79,7 +79,7 @@ class Vote(models.Model):
     state = models.CharField(max_length=2)
     name = models.CharField(max_length=100)
     score = models.DecimalField(max_digits=5, decimal_places=2)
-    memo = models.CharField(max_length=500)
+    memo = models.CharField(max_length=500,null=True)
     
 class VoteColumn(models.Model):
     vote = models.ForeignKey(Vote)
@@ -92,7 +92,7 @@ class VoteDetail(models.Model):
     votecolumn = models.ForeignKey(VoteColumn)
     votetime = models.DateTimeField()
     score = models.DecimalField(max_digits=5, decimal_places=2)
-    memo = models.CharField(max_length=500)
+    memo = models.CharField(max_length=500,null=True)
     
 
     
