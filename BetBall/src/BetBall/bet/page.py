@@ -314,9 +314,10 @@ def verifyImg(request):
     im = Image.new("RGBA", (80, 20),color=127*122)  
     draw = ImageDraw.Draw(im, "RGBA")  
     draw.ink = 255  
-    draw.text((5,0), q[0],font=ImageFont.truetype("ARIAL.TTF", 18))  
-    draw.text((20,0), q[1],font=ImageFont.truetype("ARIAL.TTF", 18))  
-    draw.text((35,0), q[2],font=ImageFont.truetype("ARIAL.TTF", 18))  
-    draw.text((50,0), q[3],font=ImageFont.truetype("ARIAL.TTF", 18))  
+    fontpath = os.path.dirname(globals()["__file__"]) + '/courbd.ttf'
+    draw.text((5,0), q[0],font=ImageFont.truetype(fontpath, 18))  
+    draw.text((20,0), q[1],font=ImageFont.truetype(fontpath, 18))  
+    draw.text((35,0), q[2],font=ImageFont.truetype(fontpath, 18))  
+    draw.text((50,0), q[3],font=ImageFont.truetype(fontpath, 18))  
     im.save(mstream,"JPEG")  
     return HttpResponse(mstream.getvalue(),"image/jpg")  
