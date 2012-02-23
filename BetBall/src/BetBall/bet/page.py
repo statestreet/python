@@ -308,9 +308,7 @@ def verifyImg(request):
     request.session['result']=result
     #创建一个IO流对象  
     mstream=StringIO.StringIO()  
-    #这是我想要从querystring中获取的显示图片的字符（如果想要图片验证，则加密它，注意我没有使用session存储这个需要显示的字符串，因为session消耗资源太大）  
     q = list(op)
-    #我这里演示的是直接产生的字符串，实际中需要加入噪音线  
     im = Image.new("RGBA", (80, 20),color=127*122)  
     draw = ImageDraw.Draw(im, "RGBA")  
     draw.ink = 255  
