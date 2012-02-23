@@ -47,9 +47,15 @@ def getMatches():
         hometeam=data[2].split("vs")[0]
         awayteam=data[2].split("vs")[1]
         final= data[4]
-        matchs = Match.objects.filter(lega=lega,matchdate=matchdate,hometeam=hometeam,awayteam=awayteam)
+        legas = Lega.objects.filter(name=lega)
+        if len(legas)==0:
+            newlega = Lega(name=lega)
+            newlega.save()
+        else:
+            newlega = legas[0]
+        matchs = Match.objects.filter(lega=newlega,matchdate=matchdate,hometeam=hometeam,awayteam=awayteam)
         if len(matchs)==0:
-            match = Match(gettime=datetime.datetime.now(),lega=lega,matchtime=matchtime,matchdate=matchdate,hometeam=hometeam,awayteam=awayteam,final=final,state='0',result=result)
+            match = Match(gettime=datetime.datetime.now(),lega=newlega,matchtime=matchtime,matchdate=matchdate,hometeam=hometeam,awayteam=awayteam,final=final,state='0',result=result)
             match.save()
         else:
             match = matchs[0]

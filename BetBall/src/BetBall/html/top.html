@@ -70,6 +70,15 @@
 															class="level0 nav-clothing.html parent"><a
 															href="/mybet"><span>My Bet</span> </a>
 														</li>
+														{% ifnotequal session.gambler None %}
+															{% ifnotequal session.gambler.internal None %}
+																<li onmouseover="toggleMenu(this,1)"
+																	onmouseout="toggleMenu(this,0)"
+																	class="level0 nav-clothing.html parent"><a
+																	href="/votes"><span>Votes</span> </a>
+																</li>
+															{% endifnotequal %}
+														{% endifnotequal %}
 													</ul>
 
 													<script type="text/javascript">

@@ -22,7 +22,7 @@ class Friend(models.Model):
 class Lega(models.Model):
     gambler = models.ForeignKey(Gambler)
     name = models.CharField(max_length=20)
-    logo = models.CharField(max_length=200)
+    logo = models.CharField(max_length=200,null=True)
 
 class Wager(models.Model):
     gambler = models.ForeignKey(Gambler)
