@@ -1,0 +1,133 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<title>vote</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="description" content="Default Description" />
+<meta name="keywords" content="Magento, Varien, E-commerce" />
+<meta name="robots" content="INDEX,FOLLOW" />
+<script type="text/javascript" src="/image/lei.js"></script>
+<script type="text/javascript">
+    function rate(obj, oEvent) 
+    {
+        var imgSrc = '/image/icon_star_1.gif';
+        var imgSrc_2 = '/image/icon_star_2.gif';
+        var e = oEvent || window.event;
+        var target = e.target || e.srcElement;
+         var imgArray = obj.getElementsByTagName("img");
+        for(var i = 0; i < imgArray.length; i++) 
+        {
+            imgArray[i]._num = i;
+            imgArray[i].onclick = function() 
+            {
+                var inputid = this.parentNode.previousSibling
+                inputid.value = this._num + 1;
+                var NodeTr = obj.parentNode
+                var tds = NodeTr.getElementsByTagName('td');
+                var score = tds[1].innerHTML
+                var result = (this._num + 1) / 5 * parseInt(score)
+                tds[3].innerHTML = result
+            }
+        }
+        if(target.tagName == "IMG") 
+        {
+            for(var j = 0; j < imgArray.length; j++) 
+            {
+
+                if(j <= target._num) 
+                {
+                    imgArray[j].src = imgSrc_2;
+                } else 
+                {
+                    imgArray[j].src = imgSrc;
+                }
+                target.parentNode.onmouseout = function() 
+                {
+                    var imgnum = parseInt(target.parentNode.previousSibling.value);
+                    for( n = 0; n < imgArray.length; n++) 
+                    {
+                        imgArray[n].src = imgSrc;
+                    }
+                    for( n = 0; n < imgnum; n++) 
+                    {
+                        imgArray[n].src = imgSrc_2;
+                    }
+                }
+            }
+        } else 
+        {
+            return false;
+        }
+    }
+</script>
+<link rel="stylesheet" type="text/css" href="/image/reset.css"
+	media="all" />
+<link rel="stylesheet" type="text/css" href="/image/styles.css"
+	media="all" />
+<link rel="stylesheet" type="text/css" href="/image/clears.css"
+	media="all" />
+<link rel="stylesheet" type="text/css" href="/image/print.css"
+	media="print" />
+<link rel="stylesheet" type="text/css" href="/image/vote.css" />
+</head>
+<h3 class="h3">{{vote.name}}</h3>
+<form action="">
+<fieldset class="fieldset">
+<div class="votes-table">
+<table >
+	<tbody>
+		<tr class="votes-tr">
+			<th>
+			name
+			</th>
+			<th>
+			score
+			</th>
+			<th>
+            vote
+           </th>
+			<th>
+			result
+			</th>
+		</tr>
+		{% for subVote in subVotes%}
+        <tr>
+            <td >{{subVote.name}}</td>
+            <td >{{subVote.score}}</td>
+            <td onmouseover="rate(this,event)">
+           <img src="/image/icon_star_1.gif" title="bad" />
+           <img src="/image/icon_star_1.gif" title="so so" />
+           <img src="/image/icon_star_1.gif" title="good" />
+           <img src="/image/icon_star_1.gif" title="better" />
+           <img src="/image/icon_star_1.gif" title="best" />
+           </td>
+           <td>{{subVote.result}}</td>
+        </tr>
+        {% endfor%}
+        <tr>
+            <td colspan="3">
+            <button class="button" type="button" style="margin-right: 20px" onclick="">
+                <span>submit</span>
+            </button>
+             <button class="button" type="button" style="margin-left: 20px" onclick="window.close()">
+                <span>cancel</span>
+            </button>
+            </td>
+            <td></td>
+        </tr>
+	</tbody>
+</table>
+<div id='inputVlue'>
+{% for subVote in subVotes%}
+<input type="hidden" name="subVote{{subVote.id}}-name" value="{{subVote.id}}"/>
+<input type="hidden"  name="subVote{{subVote.id}}-name" value="" id="subVote{{subVote.id}}"/>
+{% endfor%}
+</div>
+
+</table>
+</div>
+</fieldset>
+</form>
+</div>
+</body>
+</html>

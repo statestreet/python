@@ -1,0 +1,89 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<title>votes</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="description" content="Default Description" />
+<meta name="keywords" content="Magento, Varien, E-commerce" />
+<meta name="robots" content="INDEX,FOLLOW" />
+<script type="text/javascript" src="/image/lei.js"></script>
+<script type="text/javascript">
+var openVote = function(id)
+{
+    window.open('/voteVote?id='+id,'vote',"width=600,height=400,toolbar=no, menubar=no,location=no,top=100,left=300")
+}
+	
+</script>
+
+<link rel="stylesheet" type="text/css" href="/image/reset.css"
+	media="all" />
+<link rel="stylesheet" type="text/css" href="/image/styles.css"
+	media="all" />
+<link rel="stylesheet" type="text/css" href="/image/clears.css"
+	media="all" />
+<link rel="stylesheet" type="text/css" href="/image/print.css"
+	media="print" />
+<link rel="stylesheet" type="text/css" href="/image/vote.css" />
+</head>
+<body class="cms-index-index cms-home">
+<div class="wrapper">
+<div class="page">{% include 'top.html' %}
+<div class="main col1-layout">
+<div class="main-border">
+<div class="col-main">
+<div class="home-content-wrapper">
+<div class="home-col-1">{% include 'vote_left.htm' %}</div>
+<div class="home-col-2">
+<h3 class="h3">votes</h3>
+<fieldset class="fieldset">
+<div class="votes-table">
+<table >
+	<tbody>
+		<trclass="votes-tr">
+			<th>
+			name
+			</th>
+			<th>
+			originator
+			</th>
+			<th>
+            votedate
+            </th>
+            <th>
+            deadline
+            </th>
+            <th>
+            score
+           </th>
+			<th>
+			result
+			</th>
+			<th>operation</th>
+		</tr>
+		{% for vote in votes%}
+        <tr>
+            <td>{{vote.name}}</td>
+            <td>{{vote.gambler.name}}</td>
+            <td>{{vote.votedate|date:"Y-m-d"}}</td>
+            <td>{{vote.deadline|date:"Y-m-d"}}</td>
+            <td>{{vote.score}}</td>
+            <td>{{vote.result}}</td>
+            <td><a href="javascript:openVote({{vote.id}})">vote</a></td>
+        </tr>
+        {% endfor%}
+	</tbody>
+</table>
+</div>
+</fieldset>
+</div>
+<div class="clear"></div>
+</div>
+</div>
+</div>
+</div>
+{% include 'bottom.html' %}</div>
+</div>
+
+
+</body>
+</html>

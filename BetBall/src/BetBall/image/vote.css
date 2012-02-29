@@ -1,0 +1,112 @@
+.input
+{
+	margin: 2px;
+	padding: 1px 1px;
+	border: 2px solid #D4D0C8;
+	width: 200px;
+	height: 20px;
+}
+
+.h3
+{
+	color: #C5003D;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 14px;
+    margin: 20px 0 10px;
+    padding: 0 0 0 10px;
+}
+
+.label {
+    display: block;
+    line-height: 12px;
+    margin: 7px 1px 7px;
+    width: 100%;
+    font-weight: bold;
+}
+
+
+.fieldset {
+    background: none repeat scroll 0 0 #FBFBFB;
+    border: 1px solid #DDDDDD;
+    margin: 0 0 20px;
+    padding: 19px;
+}
+
+.text-long {
+    background: url("image/input-shaddow.gif") no-repeat scroll left top #FFFFFF;
+    border: 2px solid #DDDDDD;
+    color: #646464;
+    float: left;
+    font: 11px Arial,Helvetica,sans-serif;
+    margin: 0 10px 0 0;
+    padding: 5px 7px;
+    width: 264px;
+}
+
+.text-medium {
+    background: url("image/input-shaddow.gif") no-repeat scroll left top #FFFFFF;
+    border: 2px solid #DDDDDD;
+    color: #646464;
+    float: left;
+    font: 11px Arial,Helvetica,sans-serif;
+    margin: 0 10px 0 0;
+    padding: 5px 7px;
+    width: 124px;
+}
+
+.text-small {
+    background: url("image/input-shaddow.gif") no-repeat scroll left top #FFFFFF;
+    border: 2px solid #DDDDDD;
+    color: #646464;
+    float: left;
+    font: 11px Arial,Helvetica,sans-serif;
+    margin: 0 10px 0 0;
+    padding: 5px 7px;
+    width: 44px;
+}
+
+.textarea {
+    border: 2px solid #DDDDDD;
+    color: #646464;
+    float: left;
+    font: 11px Arial,Helvetica,sans-serif;
+    height: 80px;
+    margin: 0 10px 0 0;
+    overflow: hidden;
+    padding: 5px 7px;
+    width: 264px;
+}
+
+.table-sub-votes
+{
+	margin-top: 10px;
+	padding: 5px;
+	width: 282px;
+	border-bottom: 2px solid #D4D0C8;
+	border-top:2px solid #D4D0C8;
+}
+
+.votes-table table,.votes-table tr,.votes-table td,.votes-table th
+{
+    border: 2px solid #D4D0C8;
+    text-align :center;
+    padding:5px;
+}
+
+.votes-table table
+{
+    width:100%;
+}
+
+.votes-table th
+{
+    font-weight:bold;
+    background-color:#C5003D;
+    color:#ffffff;
+}
+
+
+
+
+

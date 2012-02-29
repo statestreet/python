@@ -1,0 +1,212 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<title>new Vote</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="description" content="Default Description" />
+<meta name="keywords" content="Magento, Varien, E-commerce" />
+<meta name="robots" content="INDEX,FOLLOW" />
+<script type="text/javascript" src="/image/lei.js"></script>
+<script type="text/javascript">
+	var count = 0;
+	
+	window.onload = function()
+	{
+		count = document.getElementsByClassName("sub-table-row").length
+		result = document.getElementById("result").value
+		if(nullCheck(result))
+		{
+			alert(result)
+			window.location.href = "/newVote/"
+		}
+	}
+		
+	var addSubVote = function()
+	{
+		var votesTable = document.getElementById("sub-table")
+		if(votesTable == null)
+		{
+			var votesArea = document.getElementById("sub-votes")
+			votesArea.innerHTML = getComment("comment-tableHeader")
+			votesTable = document.getElementById("sub-table")
+		}
+		
+		var newTr = document.createElement("tr")
+		newTr.setAttribute("id",count)
+		newTr.setAttribute("class","sub-table-row")
+		newTr.innerHTML = getComment("comment-tableRow").replace(new RegExp('count','gm'),count.toString())
+		votesTable.appendChild(newTr)
+		count++;
+	}
+	
+	var delSubVote = function(id)
+	{
+		votesTable = document.getElementById("sub-table") 
+		node = document.getElementById(id)
+		votesTable.removeChild(node)
+		if(document.getElementsByClassName("sub-table-row").length == 0)
+		{
+			document.getElementById("sub-votes").removeChild(document.getElementById("sub-table"))
+		}
+	}
+	
+	var check = function()
+	{
+		var voteName = document.getElementById("vote-name").value
+		if(!nullCheck(voteName))
+		{
+			alert("vote name can't be null");
+			return false;
+		}
+		
+		var score = document.getElementById("vote-score").value
+		if(!numCheck(score))
+		{
+			alert("score must be a number")
+			return false
+		}
+		
+		var subTable = document.getElementById("sub-table")
+		if(subTable != null)
+		{
+			var subNames = subTable.getElementsByClassName("text-medium")
+			for(var i=0; i<subNames.length; i++)
+			{
+				if(!nullCheck(subNames[i].value))
+				{
+					alert('sub vote name can\'t be null')
+					return false;
+				}
+			}
+			
+			var subScores = subTable.getElementsByClassName("text-small")
+			var sumScore = 0;
+			for(var i=0; i<subScores.length; i++)
+			{
+				var subScore = subScores[i].value
+				if(!numCheck(subScore))
+				{
+					alert('sub vote score must be a number')
+					return false
+				}
+				sumScore += parseInt(subScore)
+			}
+			
+			if(sumScore != parseInt(score))
+			{
+				alert('sum of sub votes\' score must equal the vote\'s socre ')
+				return false
+			}
+		}
+		
+		return true;
+	}
+	
+	
+</script>
+
+<link rel="stylesheet" type="text/css" href="/image/reset.css"
+	media="all" />
+<link rel="stylesheet" type="text/css" href="/image/styles.css"
+	media="all" />
+<link rel="stylesheet" type="text/css" href="/image/clears.css"
+	media="all" />
+<link rel="stylesheet" type="text/css" href="/image/print.css" media="print" />
+<link rel="stylesheet" type="text/css" href="/image/vote.css" />
+</head>
+<body class="cms-index-index cms-home">
+<div class="wrapper">
+<div class="page">{% include 'top.html' %}
+<div class="main col1-layout">
+<div class="main-border">
+<div class="col-main">
+<div class="home-content-wrapper">
+<div class="home-col-1">{% include 'vote_left.htm' %}</div>
+<div class="home-col-2">
+<h3 class="h3">new vote</h3>
+<form action="/saveOrUpdateVote/" method="post">
+<input type="hidden" name="vote-id" value="{{vote.id}}"/>
+<input type="hidden" id="result" value="{{result}}"/>
+<fieldset class="fieldset">
+
+<table id="vote-values">
+	<tr>
+		<td>
+			<label class="label">vote name</label><input class="text-long" name="vote-name" id="vote-name" value="{{vote.name}}">
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<label class="label">dead line</label><input class="text-medium" name="vote-deadline" id="vote-deadline" onclick="WdatePicker()" value="{{vote.deadline}}">
+		<td>
+	</tr>
+	<tr>
+		<td>
+			<label class="label">score</label><input class="text-small" name="vote-score" id="vote-score" value="{{vote.score}}">
+		<td>
+	</tr>
+	<tr>
+		<td><label class="label">state</label>
+			<select name="vote-state">
+                 <option value="10">opened</option>
+                 <option value="00">closed</option>
+            </select>
+        </td>
+	</tr>
+	<tr>
+		<td>
+			<label class="label">memo</label>
+			<textarea cols="1" rows="1" class="textarea" name="vote-memo"></textarea>	
+        </td>
+    </tr>
+</table>
+
+<div id="sub-votes">
+</div>
+
+
+<table>
+	<tr>	
+    	<td>
+    		<button class="button" type="button" style="margin: 10px 10px 10px 10px" onclick="addSubVote()">
+    			<span>Add Sub Vote</span>
+    		</button>
+    		<button class="button" type="submit" style="margin: 10px 10px 10px 10px" onclick="return check()"><span>Submit</span></button>
+    	</td>
+    </tr>
+</table>
+</fieldset>
+</form>				
+</div>
+<div class="clear"></div>
+</div>
+</div>
+</div>
+</div>
+{% include 'bottom.html' %}</div>
+</div>
+ <div id = "comment-tableHeader">
+<!--
+<table class="table-sub-votes" id="sub-table">
+   <tr >
+      <td>
+          <label class="label">sub-name</label>
+      </td>
+      <td>
+          <label class="label">sub-socre</label>
+      </td>
+      <td></td>
+   </tr>
+</table>
+-->
+</div>
+
+<div id="comment-tableRow">
+<!--
+<td><input class="text-medium" name="subVotecount-name"></td>
+<td><input class="text-small" name="subVotecount-score"></td>
+<td><a href="javascript:delSubVote('count')">delete</a></td>
+-->
+</div>
+</body>
+</html>

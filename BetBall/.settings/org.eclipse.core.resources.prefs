@@ -1,8 +1,9 @@
-#Wed Feb 22 12:32:59 CST 2012
+#Wed Feb 29 13:06:11 CST 2012
 eclipse.preferences.version=1
 encoding//src/BetBall/bet/MyHTMLParser.py=utf-8
 encoding//src/BetBall/bet/adminpage.py=utf-8
 encoding//src/BetBall/bet/mail.py=utf-8
 encoding//src/BetBall/bet/page.py=utf-8
+encoding//src/BetBall/bet/votepage.py=utf-8
 encoding//src/BetBall/bet/weibo.py=utf-8
 encoding//src/BetBall/bet/weibopage.py=utf-8

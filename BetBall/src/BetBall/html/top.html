@@ -37,7 +37,7 @@
 						</div>
 						<div class="clear"></div>
 						<ul class="links">
-							<li class="first">Welcome, {{request.session.gambler.username}}</li>
+							<li class="first">Welcome, {{session.gambler.username}}</li>
 							<li><a href="/myaccount" title="My Account"
 								class="top-link-account">My Account</a></li>
 							<li class="last"><a href="/admin" title="Admin"
@@ -70,15 +70,11 @@
 															class="level0 nav-clothing.html parent"><a
 															href="/mybet"><span>My Bet</span> </a>
 														</li>
-														{% ifnotequal session.gambler None %}
-															{% ifnotequal session.gambler.internal None %}
-																<li onmouseover="toggleMenu(this,1)"
-																	onmouseout="toggleMenu(this,0)"
-																	class="level0 nav-clothing.html parent"><a
-																	href="/votes"><span>Votes</span> </a>
-																</li>
-															{% endifnotequal %}
-														{% endifnotequal %}
+														<li onmouseover="toggleMenu(this,1)"
+															onmouseout="toggleMenu(this,0)"
+															class="level0 nav-clothing.html parent"><a
+															href="/allVotes/"><span>Vote</span> </a>
+														</li>
 													</ul>
 
 													<script type="text/javascript">
