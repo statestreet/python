@@ -8,10 +8,32 @@
 <meta name="robots" content="INDEX,FOLLOW" />
 <script type="text/javascript" src="/image/lei.js"></script>
 <script type="text/javascript">
+	var imgSrc = '/image/icon_star_1.gif';
+	var imgSrc_2 = '/image/icon_star_2.gif';
+
+	window.onload = function()
+	{
+		trs = document.getElementsByTagName('tr')
+		for(var i=0; i<trs.length; i++)
+		{
+			tr = trs[i]
+			if(nullCheck(tr.id))
+			{
+				imgArray = tr.getElementsByTagName("img")
+				if (imgArray && imgArray.length != 0)
+				{
+					score = parseInt(tr.getElementsByTagName("td")[3].innerHTML)/parseInt(tr.getElementsByTagName("td")[1].innerHTML)*5
+					for(var j=0; j<score; j++)
+					{
+						imgArray[j].src = imgSrc_2
+					}
+				}
+			}
+		}
+	}
+	
     function rate(obj, oEvent) 
     {
-        var imgSrc = '/image/icon_star_1.gif';
-        var imgSrc_2 = '/image/icon_star_2.gif';
         var e = oEvent || window.event;
         var target = e.target || e.srcElement;
          var imgArray = obj.getElementsByTagName("img");
@@ -26,7 +48,12 @@
                 var tds = NodeTr.getElementsByTagName('td');
                 var score = tds[1].innerHTML
                 var result = (this._num + 1) / 5 * parseInt(score)
+                priorResult = parseInt(tds[3].innerHTML)
                 tds[3].innerHTML = result
+                document.getElementById('subVote'+NodeTr.id).value = result
+                sum = document.getElementById('sum')
+                sum.value = parseInt(sum.value) - priorResult + result
+                document.getElementById('result').innerHTML = sum.value
             }
         }
         if(target.tagName == "IMG") 
@@ -74,7 +101,7 @@
 <form action="">
 <fieldset class="fieldset">
 <div class="votes-table">
-<table >
+<table>
 	<tbody>
 		<tr class="votes-tr">
 			<th>
@@ -91,7 +118,7 @@
 			</th>
 		</tr>
 		{% for subVote in subVotes%}
-        <tr>
+        <tr id="{{subVote.id}}">
             <td >{{subVote.name}}</td>
             <td >{{subVote.score}}</td>
             <td onmouseover="rate(this,event)">
@@ -106,21 +133,24 @@
         {% endfor%}
         <tr>
             <td colspan="3">
-            <button class="button" type="button" style="margin-right: 20px" onclick="">
+            <button class="button" type="submit" style="margin-right: 20px" onclick="">
                 <span>submit</span>
             </button>
              <button class="button" type="button" style="margin-left: 20px" onclick="window.close()">
                 <span>cancel</span>
             </button>
             </td>
-            <td></td>
+            <td id="result">{{result}}</td>
         </tr>
 	</tbody>
 </table>
+<input type="hidden" name="id" value="{{vote.id}}"/>
+<input type="hidden" name="result" value="{{result}}" id="sum"/>
+<input type="hidden" name="type" value="{{type}}"/>
 <div id='inputVlue'>
 {% for subVote in subVotes%}
-<input type="hidden" name="subVote{{subVote.id}}-name" value="{{subVote.id}}"/>
-<input type="hidden"  name="subVote{{subVote.id}}-name" value="" id="subVote{{subVote.id}}"/>
+<input type="hidden" name="subVote{{subVote.id}}-id" value="{{subVote.id}}"/>
+<input type="hidden"  name="subVote{{subVote.id}}-result" value="{{subVote.result}}" id="subVote{{subVote.id}}"/>
 {% endfor%}
 </div>
 

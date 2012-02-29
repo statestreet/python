@@ -5,6 +5,7 @@ from django.http import HttpResponse
 from django.template import Context, loader, RequestContext
 import re
 import datetime
+import threading
 
 '''
 for all actions of vote
@@ -26,13 +27,22 @@ def votes(request):
 
 def voteVote(request):
     id = request.GET['id']
-    if id:
-        vote = Vote.objects.filter(id=id)
+    voter = 'gambler' in request.session and request.session['gambler']
+    if id and voter:
+        vote = Vote.objects.get(id=id)
         if vote:
             subVotes = VoteColumn.objects.filter(vote=vote)
-            if not subVotes :
-                subVotes = list(subVotes).append(vote)
-            context = Context({'session':request.session,'subVotes':subVotes,"vote":vote})
+            list = []
+            type = 'update'
+            result = 0
+            if len(VoteDetail.objects.filter(vote=vote,voter=voter)) != 0:
+                for subVote in subVotes:
+                    voteDetail = VoteDetail.objects.get(vote=vote,voter=voter,votecolumn=subVote)
+                    if voteDetail:
+                        subVote.result = voteDetail.score
+                        result += subVote.result
+            else:list = subVotes;type = 'add'
+            context = Context({'session':request.session,'subVotes':list,"vote":vote,'type':type,'result':result})
             template=loader.get_template("voteVote.htm")
             return HttpResponse(template.render(context))
     return HttpResponse("error")
@@ -53,7 +63,6 @@ def saveOrUpdateVote(request):
             subVote = count in subVoteMap and subVoteMap[count] or {}
             subVote[key] = v.strip()
             subVoteMap[count] = subVote
-    
     vote = Vote(**voteMap)
     vote.votedate = datetime.datetime.now()
     vote.gambler = request.session['gambler']
@@ -69,8 +78,28 @@ def saveOrUpdateVote(request):
     template = loader.get_template("new_votes.htm")
     return HttpResponse(template.render(context))
 
-def newVote(request):
-    pass
+def vote(request):
+    id = 'id' in request.POST and request.POST['id']
+    lock = threading.Lock()
+    lock.acquire()
+    try:
+        vote = id and Vote.objects.get(id = id)
+        voter = request.session['gambler']
+        subVotes = VoteColumn.objects.filter(vote = vote)
+        votesum = 0
+        for subVote in subVotes:
+            subResult = request.POST['subVote%s-result' % subVote.id]
+            voteDetail = VoteDetail.objects.get(vote=vote,votecolumn=subVote,voter=voter) or \
+                                    VoteDetail(vote=vote,votecolumn=subVote,voter=voter,votetime = datetime.datetime.now(),score=0)
+            
+            
+        
+            
+    finally:
+        lock.release()
+        
+    return HttpResponse("error")  
+        
 
 
     
