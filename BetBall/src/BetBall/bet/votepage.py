@@ -25,24 +25,25 @@ def votes(request):
     template=loader.get_template("votes.htm")
     return HttpResponse(template.render(context))
 
-def voteVote(request):
-    id = request.GET['id']
+def voteVote(request,args = {}):
+    id = 'id' in request.POST and request.POST['id'] or 'id' in request.GET and request.GET['id']
     voter = 'gambler' in request.session and request.session['gambler']
     if id and voter:
         vote = Vote.objects.get(id=id)
         if vote:
             subVotes = VoteColumn.objects.filter(vote=vote)
-            list = []
             type = 'update'
             result = 0
             if len(VoteDetail.objects.filter(vote=vote,voter=voter)) != 0:
                 for subVote in subVotes:
-                    voteDetail = VoteDetail.objects.get(vote=vote,voter=voter,votecolumn=subVote)
+                    voteDetails = VoteDetail.objects.filter(vote=vote,voter=voter,votecolumn=subVote)
+                    voteDetail = voteDetails and voteDetails[0]
                     if voteDetail:
                         subVote.result = voteDetail.score
                         result += subVote.result
-            else:list = subVotes;type = 'add'
-            context = Context({'session':request.session,'subVotes':list,"vote":vote,'type':type,'result':result})
+            context = Context({'session':request.session,'subVotes':subVotes,"vote":vote,'type':type,'result':result})
+            if args and "voteResult" in args:
+                context['voteResult'] = args['voteResult']
             template=loader.get_template("voteVote.htm")
             return HttpResponse(template.render(context))
     return HttpResponse("error")
@@ -79,26 +80,43 @@ def saveOrUpdateVote(request):
     return HttpResponse(template.render(context))
 
 def vote(request):
-    id = 'id' in request.POST and request.POST['id']
-    lock = threading.Lock()
+    id = 'id' in request.POST and request.POST['id'] or 'id' in request.GET and request.GET['id']
+    if not id :
+        return HttpResponse("error")  
+    lock = threading.RLock()
     lock.acquire()
     try:
         vote = id and Vote.objects.get(id = id)
         voter = request.session['gambler']
-        subVotes = VoteColumn.objects.filter(vote = vote)
-        votesum = 0
+        subVotes = VoteColumn.objects.filter(vote=vote).order_by('vote')
         for subVote in subVotes:
             subResult = request.POST['subVote%s-result' % subVote.id]
-            voteDetail = VoteDetail.objects.get(vote=vote,votecolumn=subVote,voter=voter) or \
-                                    VoteDetail(vote=vote,votecolumn=subVote,voter=voter,votetime = datetime.datetime.now(),score=0)
-            
-            
-        
-            
+            voteDetails =  VoteDetail.objects.filter(vote=vote,votecolumn=subVote,voter=voter)
+            voteDetail = voteDetails and voteDetails[0] or VoteDetail(
+                        vote=vote,votecolumn=subVote,voter=voter,votetime=datetime.datetime.now())
+            voteDetail.score = subResult
+            voteDetail.save()
+        sumScore = 0
+        sumVoter = 0
+        vote.result = 0
+        for subVote in subVotes:
+            sumScore = 0;
+            voteDetails =  VoteDetail.objects.filter(vote=vote,votecolumn=subVote)
+            sumVoter = len(voteDetails)
+            for voteDetail in voteDetails:
+                sumScore += voteDetail.score
+            subVote.result = sumScore/sumVoter
+            vote.result += subVote.result
+            subVote.save()
+        vote.save() 
+        return voteVote(request,{'voteResult':'success'})
     finally:
         lock.release()
         
     return HttpResponse("error")  
+
+
+    
         
 
 

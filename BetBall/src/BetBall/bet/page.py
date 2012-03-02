@@ -69,8 +69,8 @@ def gologin(request):
 def login(request):  
     r = request.POST['result']
     sr = request.session['result']
-    if r!=str(sr):
-        return result("Wrong answer!")
+    #if r!=str(sr):
+    #    return result("Wrong answer!")
     username = request.POST['username']
     m = Gambler.objects.filter(username=username)      
     pwd = md5.new(request.POST['password'])

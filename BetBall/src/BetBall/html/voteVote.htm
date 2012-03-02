@@ -13,6 +13,14 @@
 
 	window.onload = function()
 	{
+		if(nullCheck(document.getElementById('voteResult').value))
+		{
+			alert(document.getElementById('voteResult').value);
+			window.close();
+			window.parent.location.reload()
+			return;
+		}
+		
 		trs = document.getElementsByTagName('tr')
 		for(var i=0; i<trs.length; i++)
 		{
@@ -98,7 +106,7 @@
 <link rel="stylesheet" type="text/css" href="/image/vote.css" />
 </head>
 <h3 class="h3">{{vote.name}}</h3>
-<form action="">
+<form action="vote/" method="POST">
 <fieldset class="fieldset">
 <div class="votes-table">
 <table>
@@ -147,6 +155,7 @@
 <input type="hidden" name="id" value="{{vote.id}}"/>
 <input type="hidden" name="result" value="{{result}}" id="sum"/>
 <input type="hidden" name="type" value="{{type}}"/>
+<input type="hidden" name="voteResult" value="{{voteResult}}" id="voteResult"/>
 <div id='inputVlue'>
 {% for subVote in subVotes%}
 <input type="hidden" name="subVote{{subVote.id}}-id" value="{{subVote.id}}"/>
