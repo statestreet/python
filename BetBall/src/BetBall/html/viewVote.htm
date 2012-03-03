@@ -1,0 +1,103 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<title>vote</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="description" content="Default Description" />
+<meta name="keywords" content="Magento, Varien, E-commerce" />
+<meta name="robots" content="INDEX,FOLLOW" />
+<script type="text/javascript" src="/image/lei.js"></script>
+<script type="text/javascript">
+
+</script>
+<link rel="stylesheet" type="text/css" href="/image/reset.css"
+	media="all" />
+<link rel="stylesheet" type="text/css" href="/image/styles.css"
+	media="all" />
+<link rel="stylesheet" type="text/css" href="/image/clears.css"
+	media="all" />
+<link rel="stylesheet" type="text/css" href="/image/print.css"
+	media="print" />
+<link rel="stylesheet" type="text/css" href="/image/vote.css" />
+</head>
+<h3 class="h3">{{vote.name}}</h3>
+<form action="vote/" method="post">
+<fieldset class="fieldset">
+<div class="votes-table">
+<table>
+	<tbody>
+		<tr class="votes-tr">
+			<th>
+			name
+			</th>
+			<th>
+			score
+			</th>
+			<th>
+            result
+           </th>
+		</tr>
+		<tr class="votes-tr">
+			<td>
+			{{vote.name}}
+			</td>
+			<td>
+			{{vote.score}}
+			</td>
+			<td>
+            {{vote.result}}
+           </td>
+		</tr>
+		<tr class="votes-tr">
+			<th colspan="3">
+			sub votes
+           </th>
+		</tr>
+		{% for subVote in subVotes%}
+        <tr id="{{subVote.id}}">
+            <td >{{subVote.name}}</td>
+            <td >{{subVote.score}}</td>
+           <td>{{subVote.result}}</td>
+        </tr>
+        {% endfor%}
+        <tr>
+            <th colspan="3">
+          	vote detail
+            </th>
+        </tr>
+        <tr>
+            <th>
+          	voted
+            </th>
+              <td colspan="2">
+          	{{voted}}
+            </td>
+        </tr>
+         <tr>
+            <th>
+          	not voted
+            </th>
+            <td colspan="2">
+          	{{nonVoted}}
+            </td>
+        </tr>
+	</tbody>
+</table>
+<input type="hidden" name="id" value="{{vote.id}}"/>
+<input type="hidden" name="result" value="{{result}}" id="sum"/>
+<input type="hidden" name="type" value="{{type}}"/>
+<input type="hidden" name="voteResult" value="{{voteResult}}" id="voteResult"/>
+<div id='inputVlue'>
+{% for subVote in subVotes%}
+<input type="hidden" name="subVote{{subVote.id}}-id" value="{{subVote.id}}"/>
+<input type="hidden"  name="subVote{{subVote.id}}-result" value="{{subVote.result}}" id="subVote{{subVote.id}}"/>
+{% endfor%}
+</div>
+
+</table>
+</div>
+</fieldset>
+</form>
+</div>
+</body>
+</html>

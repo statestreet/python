@@ -5,13 +5,13 @@ class Gambler(models.Model):
     name = models.CharField(max_length=20)
     balance = models.IntegerField(4)
     state = models.CharField(max_length=2)
-    code = models.CharField(max_length=32,null=True)
+    code = models.CharField(max_length=32)
     regtime = models.DateTimeField()
     email=models.CharField(max_length=100)
     password= models.CharField(max_length=32)
-    weibo = models.CharField(max_length=32,null=True)
-    weibo_nick = models.CharField(max_length=50,null=True)
-    internal = models.IntegerField(1,null=True)
+    weibo = models.CharField(max_length=32)
+    weibo_nick = models.CharField(max_length=50)
+    internal = models.IntegerField(1)
 
 class Friend(models.Model):
     gambler = models.ForeignKey(Gambler,related_name='gambler')
