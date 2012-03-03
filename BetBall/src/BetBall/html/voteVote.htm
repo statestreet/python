@@ -10,14 +10,13 @@
 <script type="text/javascript">
 	var imgSrc = '/image/icon_star_1.gif';
 	var imgSrc_2 = '/image/icon_star_2.gif';
-
 	window.onload = function()
 	{
 		if(nullCheck(document.getElementById('voteResult').value))
 		{
 			alert(document.getElementById('voteResult').value);
 			window.close();
-			window.parent.location.reload()
+			window.opener.location.reload();
 			return;
 		}
 		
@@ -34,6 +33,7 @@
 					for(var j=0; j<score; j++)
 					{
 						imgArray[j].src = imgSrc_2
+						imgArray[j].parentNode.previousSibling.value = score
 					}
 				}
 			}
@@ -44,12 +44,13 @@
     {
         var e = oEvent || window.event;
         var target = e.target || e.srcElement;
-         var imgArray = obj.getElementsByTagName("img");
+        var imgArray = obj.getElementsByTagName("img");
         for(var i = 0; i < imgArray.length; i++) 
         {
             imgArray[i]._num = i;
             imgArray[i].onclick = function() 
             {
+            	var rate_flag = true;
                 var inputid = this.parentNode.previousSibling
                 inputid.value = this._num + 1;
                 var NodeTr = obj.parentNode
@@ -68,7 +69,6 @@
         {
             for(var j = 0; j < imgArray.length; j++) 
             {
-
                 if(j <= target._num) 
                 {
                     imgArray[j].src = imgSrc_2;
@@ -106,7 +106,7 @@
 <link rel="stylesheet" type="text/css" href="/image/vote.css" />
 </head>
 <h3 class="h3">{{vote.name}}</h3>
-<form action="vote/" method="POST">
+<form action="vote/" method="post">
 <fieldset class="fieldset">
 <div class="votes-table">
 <table>
