@@ -90,6 +90,9 @@ def saveOrUpdateVote(request):
             subVote[key] = v.strip()
             subVoteMap[count] = subVote
     vote = Vote(**voteMap)
+    type = 'save'
+    if vote.id:
+        type = 'update'
     vote.votedate = datetime.datetime.now()
     vote.gambler = request.session['gambler']
     vote.result = vote.result or 0
@@ -102,6 +105,8 @@ def saveOrUpdateVote(request):
         
     context = Context({'vote':vote,'session':request.session,'result':result})
     template = loader.get_template("new_votes.htm")
+    if type == 'update':
+        template = loader.get_template("editVote.htm")
     return HttpResponse(template.render(context))
 
 @interceptor
@@ -170,13 +175,47 @@ def delVote(request):
     gambler = 'gambler' in request.session and request.session['gambler']
     id ='id' in request.GET and request.GET['id']
     vote = Vote.objects.get(id=id)
-    if vote and vote.gambler.username == gambler.username:
+    if vote and vote.gambler.id == gambler.id:
         vote.delete()
         result = 'success'
     else:
         result = 'Delete failed'
-    
     return myVotes(request,result=result)
+
+@interceptor
+def goEditVote(request):
+    id = request.GET['id']
+    vote = Vote.objects.get(id=id)
+    gambler = 'gambler' in request.session and request.session['gambler']
+    if vote and vote.gambler.id == gambler.id:
+        subVotes = VoteColumn.objects.filter(vote=vote)
+        context = Context({'session':request.session,'vote':vote,'subVotes':subVotes})
+        template = loader.get_template("editVote.htm");
+        if isVoted(id):
+            template = loader.get_template("editDeadline.htm")
+        return HttpResponse(template.render(context));
+    else:
+        return HttpResponse('error') 
+
+  
+def isVoted(id):
+    vote = Vote.objects.get(id=id)
+    voteDetails = VoteDetail.objects.filter(vote = vote)
+    if len(voteDetails) == 0:
+        return False
+    else :
+        return True
+
+def delSubVote(request):
+    id = request.GET['id']
+    subVote = VoteColumn.objects.get(id=id)
+    gambler = 'gambler' in request.session and request.session['gambler']
+    if subVote and subVote.vote.gambler.id == gambler.id:
+        subVote.delete()
+        return HttpResponse("success")
+    else:
+        return HttpResponse("delete faild")
+  
         
 
     

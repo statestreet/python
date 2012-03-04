@@ -1,7 +1,7 @@
 from BetBall.bet.adminpage import *
 from BetBall.bet.page import *
 from BetBall.bet.votepage import goNewVotePage, saveOrUpdateVote, votes, \
-    voteVote, vote, myVotes, viewVote, delVote
+    voteVote, vote, myVotes, viewVote, delVote, goEditVote, isVoted, delSubVote
 from BetBall.bet.weibopage import *
 from django.conf.urls.defaults import *
 import os
@@ -61,6 +61,9 @@ urlpatterns = patterns('',
      (r'^myVotes/',myVotes),
      (r'^viewVote',viewVote),
      (r'^delVote',delVote),
+     (r'^goEditVote',goEditVote),
+     (r'^voted',isVoted),
+     (r'^delSubVote',delSubVote),
      (r'^image/(?P<path>.*)$', 'django.views.static.serve', {'document_root': os.path.dirname(globals()["__file__"]) + '/image'}),
      (r'^files/(?P<path>.*)$', 'django.views.static.serve', {'document_root': os.path.dirname(globals()["__file__"]) + '/html/files'})
     # Uncomment the admin/doc line below to enable admin documentation:

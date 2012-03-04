@@ -25,6 +25,15 @@ var openw = function(url)
 	}
 }
 
+var goEdit = function(id)
+{
+	if(id)
+	{
+		window.open("/goEditVote?id="+id,'vote',"width=600,height=600,toolbar=no, menubar=no,location=no,top=100,left=300");
+	}
+}
+	
+
 </script>
 
 <link rel="stylesheet" type="text/css" href="/image/reset.css"
@@ -49,6 +58,7 @@ var openw = function(url)
 <h3 class="h3">votes</h3>
 <fieldset class="fieldset">
 <div class="votes-table">
+<input type="hidden" name="voteid" value="{{vote.id}}" id="voteid"/>
 <input type="hidden" name="result" value="{{result}}" id="result"/>
 <table >
 	<tbody>
@@ -82,7 +92,7 @@ var openw = function(url)
             <td>{{vote.score}}</td>
             <td>{{vote.result}}</td>
             <td><a href ="/viewVote?id={{vote.id}}" onclick="openw(this.href); return false;">view</a></td>
-            <td><a href="#">edit</a></td>
+            <td><a href="/goEditVote?id={{vote.id}}" onclick="goEdit({{vote.id}}); return false;">edit</a></td>
             <td><a href="/delVote?id={{vote.id}}" onclick="return window.confirm('delete?');">delete</a></td>
         </tr>
         {% endfor%}
