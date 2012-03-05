@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head>
-<title>new Vote</title>
+<title>edit vote</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <meta name="description" content="Default Description" />
 <meta name="keywords" content="Magento, Varien, E-commerce" />
@@ -13,7 +13,7 @@
 	
 	window.onload = function()
 	{
-		count = document.getElementsByClassName("sub-table-row").length + 1
+		count = document.getElementById("sub-table").getElementsByTagName('tr').length
 		result = document.getElementById("result").value
 		if(nullCheck(result))
 		{
@@ -47,24 +47,16 @@
 			return;
 		}
 		
-		var del = function(data)
+		votesTable = document.getElementById("sub-table");
+		node = document.getElementById(id);
+		votesTable.removeChild(node);
+		if(votesTable.getElementsByTagName("tr").length == 1)
 		{
-			alert(data)
-			
-			if(data != 'success')
-			{
-				return;
-			}
-			votesTable = document.getElementById("sub-table") 
-			node = document.getElementById(id)
-			votesTable.removeChild(node)
-			if(document.getElementsByClassName("sub-table-row").length == 0)
-			{
-				document.getElementById("sub-votes").removeChild(document.getElementById("sub-table"))
-			}
+			document.getElementById("sub-votes").removeChild(votesTable.parentNode);
 		}
 		
-		request('delSubVote?id='+id,del)
+		delInput = getComment("hidden-input").replace(new RegExp('sid','gm'),id.toString())
+		document.getElementById('del-ids').innerHTML += delInput
 	}
 	
 	var check = function()
@@ -73,6 +65,25 @@
 		if(!nullCheck(voteName))
 		{
 			alert("vote name can't be null");
+			return false;
+		}
+		
+		var deadline = document.getElementById("vote-deadline").value
+		var myDate = new Date();
+		var month = parseInt(myDate.getMonth())+1
+		if (month < 10)
+		{
+			month = '0' + month;	
+		}
+		var date = parseInt(myDate.getDate());
+		if(date < 10)
+		{
+			date = '0' + date
+		}
+		var currentDate = myDate.getFullYear() +"-"+month +"-"+date;
+		if(deadline <= currentDate)
+		{
+			alert('dead line must later than current date');
 			return false;
 		}
 		
@@ -86,7 +97,7 @@
 		var subTable = document.getElementById("sub-table")
 		if(subTable != null)
 		{
-			var subNames = subTable.getElementsByClassName("text-medium")
+			var subNames = elementsByClassName("text-medium",subTable)
 			for(var i=0; i<subNames.length; i++)
 			{
 				if(!nullCheck(subNames[i].value))
@@ -96,7 +107,7 @@
 				}
 			}
 			
-			var subScores = subTable.getElementsByClassName("text-small")
+			var subScores = elementsByClassName("text-small",subTable)
 			var sumScore = 0;
 			for(var i=0; i<subScores.length; i++)
 			{
@@ -114,6 +125,11 @@
 				alert('sum of sub votes\' score must equal the vote\'s socre ')
 				return false
 			}
+			
+		}else
+		{
+			alert('must have sub vote! ')
+			return false
 		}
 		
 		return true;
@@ -172,7 +188,8 @@
 
 <div id="sub-votes">
 {% if subVotes|length > 0 %}
-<table class="table-sub-votes" id="sub-table">
+<table class="table-sub-votes" >
+<tbody id="sub-table">
    <tr >
       <td>
           <label class="label">sub-name</label>
@@ -183,7 +200,7 @@
       <td></td>
    </tr>
    {% for subVote in subVotes %}
-   <tr>
+   <tr id ="{{subVote.id}}">
   	 	<td>
   	 	<input type="hidden" name="subVote{{forloop.counter}}-id" value="{{subVote.id}}"/> 
   	 	<input class="text-medium" name="subVote{{forloop.counter}}-name" value="{{subVote.name}}">
@@ -192,9 +209,12 @@
    		<td><a href="javascript:delSubVote('{{subVote.id}}')">delete</a></td>
    </tr>
    {% endfor %}
+  </tbody>
 </table>
 {% endif %}
 
+</div>
+<div id="del-ids">
 </div>
 <table>
 	<tr>	
@@ -208,30 +228,12 @@
 </table>
 
 </fieldset>
-</form>				
-</div>
-<div id = "comment-tableHeader">
-<!--
-<table class="table-sub-votes" id="sub-table">
-   <tr >
-      <td>
-          <label class="label">sub-name</label>
-      </td>
-      <td>
-          <label class="label">sub-socre</label>
-      </td>
-      <td></td>
-   </tr>
-</table>
--->
-</div>
-
-<div id="comment-tableRow">
-<!--
-<td><input class="text-medium" name="subVotecount-name"></td>
-<td><input class="text-small" name="subVotecount-score"></td>
-<td><a href="javascript:delSubVote('count')">delete</a></td>
--->
+</form>
+<div id="hidden-input">
+<!-- 
+<input type="hidden" name="del-sid" value="sid"/> 
+ -->
+</div>				
 </div>
 </body>
 </html>

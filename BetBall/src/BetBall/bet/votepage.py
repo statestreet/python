@@ -13,6 +13,7 @@ for all actions of vote
 '''
 votePatt = re.compile("^vote-(\w+)$")
 subVotePatt = re.compile("^subVote(\d+)-(\w+)$")
+delSubVotePatt = re.compile("^del-(\d+)$")
 
 
 def interceptor(func):
@@ -78,6 +79,13 @@ def saveOrUpdateVote(request):
     voteMap = {}
     subVoteMap = {}
     for k,v in request.POST.items():
+        m = re.match(delSubVotePatt,k)
+        if m and v:
+            print v
+            subVote = VoteColumn.objects.get(id=v)
+            subVote.delete()
+            print("del subVote with id: " + v)
+            continue
         m = re.match(votePatt,k)
         if m and v:
             voteMap[m.group(1)] = v.strip()
@@ -90,9 +98,11 @@ def saveOrUpdateVote(request):
             subVote[key] = v.strip()
             subVoteMap[count] = subVote
     vote = Vote(**voteMap)
-    type = 'save'
+    type = 'add'
     if vote.id:
         type = 'update'
+        if Vote.objects.get(id = vote.id).gambler.id  != request.session['gambler'].id:
+            raise Exception('can not edit !')
     vote.votedate = datetime.datetime.now()
     vote.gambler = request.session['gambler']
     vote.result = vote.result or 0
@@ -206,16 +216,7 @@ def isVoted(id):
     else :
         return True
 
-def delSubVote(request):
-    id = request.GET['id']
-    subVote = VoteColumn.objects.get(id=id)
-    gambler = 'gambler' in request.session and request.session['gambler']
-    if subVote and subVote.vote.gambler.id == gambler.id:
-        subVote.delete()
-        return HttpResponse("success")
-    else:
-        return HttpResponse("delete faild")
-  
+   
         
 
     

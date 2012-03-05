@@ -59,6 +59,25 @@
 			return false;
 		}
 		
+		var deadline = document.getElementById("vote-deadline").value
+		var myDate = new Date();
+		var month = parseInt(myDate.getMonth())+1
+		if (month < 10)
+		{
+			month = '0' + month;	
+		}
+		var date = parseInt(myDate.getDate());
+		if(date < 10)
+		{
+			date = '0' + date
+		}
+		var currentDate = myDate.getFullYear() +"-"+month +"-"+date;
+		if(deadline <= currentDate)
+		{
+			alert('dead line must later than current date');
+			return false;
+		}
+		
 		var score = document.getElementById("vote-score").value
 		if(!numCheck(score))
 		{
@@ -69,7 +88,7 @@
 		var subTable = document.getElementById("sub-table")
 		if(subTable != null)
 		{
-			var subNames = subTable.getElementsByClassName("text-medium")
+			var subNames = elementsByClassName("text-medium",subTable)
 			for(var i=0; i<subNames.length; i++)
 			{
 				if(!nullCheck(subNames[i].value))
@@ -79,7 +98,8 @@
 				}
 			}
 			
-			var subScores = subTable.getElementsByClassName("text-small")
+			
+			var subScores = elementsByClassName("text-small",subTable)
 			var sumScore = 0;
 			for(var i=0; i<subScores.length; i++)
 			{
@@ -97,6 +117,10 @@
 				alert('sum of sub votes\' score must equal the vote\'s socre ')
 				return false
 			}
+		}else
+		{
+			alert('must have sub vote! ')
+			return false
 		}
 		
 		return true;

@@ -70,3 +70,25 @@ var getComment = function(id)
     }
 }
 
+var elementsByClassName = function(className, oBox) 
+{
+		// 适用于获取某个HTML区块内部含有某一特定className的所有HTML元素
+		this.d = oBox || document;
+		var children = this.d.getElementsByTagName('*') || document.all;
+		var elements = new Array();
+		for ( var ii = 0; ii < children.length; ii++) 
+		{
+			var child = children[ii];
+			var classNames = child.className.split(' ');
+			for ( var j = 0; j < classNames.length; j++) 
+			{
+				if (classNames[j] == className) 
+				{
+					elements.push(child);
+					break;
+				}
+			}
+		}
+		return elements;
+}
+
