@@ -40,7 +40,9 @@ def goNewVotePage(request):
 
 @interceptor
 def votes(request):
-    votes = Vote.objects.filter(state = '10')
+    votes = Vote.objects.filter(state = '10',deadline__gte = datetime.date(datetime.datetime.now().year,
+                                                                           datetime.datetime.now().month,
+                                                                           datetime.datetime.now().day))
     context = Context({'session':request.session,'votes':votes})
     template=loader.get_template("votes.htm")
     return HttpResponse(template.render(context))

@@ -22,41 +22,32 @@
 		}
 	}
 		
-	var addSubVote = function()
-	{
-		var votesTable = document.getElementById("sub-table")
-		if(votesTable == null)
-		{
-			var votesArea = document.getElementById("sub-votes")
-			votesArea.innerHTML = getComment("comment-tableHeader")
-			votesTable = document.getElementById("sub-table")
-		}
-		
-		var newTr = document.createElement("tr")
-		newTr.setAttribute("id",count)
-		newTr.setAttribute("class","sub-table-row")
-		newTr.innerHTML = getComment("comment-tableRow").replace(new RegExp('count','gm'),count.toString())
-		votesTable.appendChild(newTr)
-		count++;
-	}
-	
-	var delSubVote = function(id)
-	{
-		votesTable = document.getElementById("sub-table") 
-		node = document.getElementById(id)
-		votesTable.removeChild(node)
-		if(document.getElementsByClassName("sub-table-row").length == 0)
-		{
-			document.getElementById("sub-votes").removeChild(document.getElementById("sub-table"))
-		}
-	}
-	
+
 	var check = function()
 	{
 		var voteName = document.getElementById("vote-name").value
 		if(!nullCheck(voteName))
 		{
 			alert("vote name can't be null");
+			return false;
+		}
+		
+		var deadline = document.getElementById("vote-deadline").value
+		var myDate = new Date();
+		var month = parseInt(myDate.getMonth())+1
+		if (month < 10)
+		{
+			month = '0' + month;	
+		}
+		var date = parseInt(myDate.getDate());
+		if(date < 10)
+		{
+			date = '0' + date
+		}
+		var currentDate = myDate.getFullYear() +"-"+month +"-"+date;
+		if(deadline <= currentDate)
+		{
+			alert('dead line must later than current date');
 			return false;
 		}
 		
@@ -67,39 +58,7 @@
 			return false
 		}
 		
-		var subTable = document.getElementById("sub-table")
-		if(subTable != null)
-		{
-			var subNames = subTable.getElementsByClassName("text-medium")
-			for(var i=0; i<subNames.length; i++)
-			{
-				if(!nullCheck(subNames[i].value))
-				{
-					alert('sub vote name can\'t be null')
-					return false;
-				}
-			}
-			
-			var subScores = subTable.getElementsByClassName("text-small")
-			var sumScore = 0;
-			for(var i=0; i<subScores.length; i++)
-			{
-				var subScore = subScores[i].value
-				if(!numCheck(subScore))
-				{
-					alert('sub vote score must be a number')
-					return false
-				}
-				sumScore += parseInt(subScore)
-			}
-			
-			if(sumScore != parseInt(score))
-			{
-				alert('sum of sub votes\' score must equal the vote\'s socre ')
-				return false
-			}
-		}
-		
+	
 		return true;
 	}
 	
