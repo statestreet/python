@@ -313,14 +313,10 @@ def verifyImg(request):
     request.session['result']=result
     #创建一个IO流对象  
     mstream=StringIO.StringIO()  
-    q = list(op)
     im = Image.new("RGBA", (80, 20),color=127*122)  
     draw = ImageDraw.Draw(im, "RGBA")  
     draw.ink = 255  
-    fontpath = os.path.dirname(globals()["__file__"]) + '/courbd.ttf'
-    draw.text((5,0), q[0],font=ImageFont.truetype(fontpath, 18))  
-    draw.text((20,0), q[1],font=ImageFont.truetype(fontpath, 18))  
-    draw.text((35,0), q[2],font=ImageFont.truetype(fontpath, 18))  
-    draw.text((50,0), q[3],font=ImageFont.truetype(fontpath, 18))  
+    font = ImageFont.truetype("courbd.ttf", 14)
+    draw.text((10, 5), op, font=font, fill="#000000")  
     im.save(mstream,"JPEG")  
     return HttpResponse(mstream.getvalue(),"image/jpg")  
