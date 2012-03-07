@@ -48,14 +48,29 @@ def getMatches():
         awayteam=data[2].split("vs")[1]
         final= data[4]
         legas = Lega.objects.filter(name=lega)
+        gamblers = Gambler.objects.filter(name='admin')
+        admingambler=None
+        if len(gamblers)==0:
+            admingambler = Gambler(username='admin',name='admin',balance=0,state='00',regtime=datetime.datetime.now(),internal=1)
+            admingambler.save()
+        else:
+            admingambler= gamblers[0]
         if len(legas)==0:
-            newlega = Lega(name=lega)
+            newlega = Lega(name=lega,gambler=admingambler)
             newlega.save()
         else:
             newlega = legas[0]
         matchs = Match.objects.filter(lega=newlega,matchdate=matchdate,hometeam=hometeam,awayteam=awayteam)
+        wagers = Wager.objects.filter(gambler=admingambler,name='coke')
+        wager = None
+        if len(wagers)==0:
+            wager = Wager(gambler=admingambler,name='coke')
+            wager.save()
+        else:
+            wager= wagers[0]
+        
         if len(matchs)==0:
-            match = Match(gettime=datetime.datetime.now(),lega=newlega,matchtime=matchtime,matchdate=matchdate,hometeam=hometeam,awayteam=awayteam,final=final,state='0',result=result)
+            match = Match(wager=wager,gettime=datetime.datetime.now(),lega=newlega,matchtime=matchtime,matchdate=matchdate,hometeam=hometeam,awayteam=awayteam,final=final,state='0',result=result)
             match.save()
         else:
             match = matchs[0]

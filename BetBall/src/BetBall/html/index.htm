@@ -37,21 +37,21 @@
 			{% for match in list%}
 			<td>
 			<h3 class="product-name"><a href="http://www.google.com.hk/search?q={{match.hometeam}}+{{match.awayteam}}"
-				title="{{match.hometeam}}vs{{match.awayteam}}"  target="_blank">({{match.lega}}) {{match.hometeam}}vs{{match.awayteam}}</a>
+				title="{{match.hometeam}}vs{{match.awayteam}}"  target="_blank">({{match.lega.name}}) {{match.hometeam}}vs{{match.awayteam}}</a>
 			</h3>
-			{% ifequal match.lega "NBA" %}
+			{% ifequal match.lega.name "NBA" %}
 			<div style="width:130px;height:150px;background:url('/image/lega/nba.png') no-repeat scroll left 2px transparent"></div>
-			{% else %}{% ifequal match.lega "中超" %}
+			{% else %}{% ifequal match.lega.name "中超" %}
 			<div style="width:130px;height:150px;background:url('/image/lega/csl.jpg') no-repeat scroll left 2px transparent"></div>
-			{% else %}{% ifequal match.lega "意甲" %}
+			{% else %}{% ifequal match.lega.name "意甲" %}
 			<div style="width:130px;height:150px;background:url('/image/lega/legaa.jpg') no-repeat scroll left 2px transparent"></div>
-			{% else %}{% ifequal match.lega "英超" %}
+			{% else %}{% ifequal match.lega.name "英超" %}
 			<div style="width:130px;height:150px;background:url('/image/lega/premier.jpg') no-repeat scroll left 2px transparent"></div>
-			{% else %}{% ifequal match.lega "欧联" %}
+			{% else %}{% ifequal match.lega.name "欧联" %}
 			<div style="width:130px;height:150px;background:url('/image/lega/uefa.jpg') no-repeat scroll left 2px transparent"></div>
-			{% else %}{% ifequal match.lega "西甲" %}
+			{% else %}{% ifequal match.lega.name "西甲" %}
 			<div style="width:130px;height:150px;background:url('/image/lega/lfp.jpg') no-repeat scroll left 2px transparent"></div>
-			{% else %}{% ifequal match.lega "亚冠杯" %}
+			{% else %}{% ifequal match.lega.name "亚冠杯" %}
 			<div style="width:130px;height:150px;background:url('/image/lega/afc.jpg') no-repeat scroll left 2px transparent"></div>
 			{% else %}
 			<div style="width:130px;height:150px;background:url('/image/lega/coke.gif') no-repeat scroll left 2px transparent"></div>

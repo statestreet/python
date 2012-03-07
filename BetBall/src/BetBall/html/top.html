@@ -37,11 +37,13 @@
 						</div>
 						<div class="clear"></div>
 						<ul class="links">
-							<li class="first">Welcome, {{session.gambler.username}}</li>
+							{% ifnotequal session.gambler None %}<li>Welcome, {{session.gambler.username}}</li>{% endifnotequal %}
 							<li><a href="/myaccount" title="My Account"
 								class="top-link-account">My Account</a></li>
-							<li class="last"><a href="/admin" title="Admin"
+							<li><a href="/admin" title="Admin"
 								class="top-link-cart">Admin</a></li>
+							{% ifnotequal session.gambler None %}<li class="last"><a href="/logout" title="Logout"
+								class="top-link-cart">Logout</a></li>{% endifnotequal %}
 						</ul>
 						<div class="clear"></div>
 						<fieldset class="form-language">
@@ -65,16 +67,20 @@
 															class="level0 nav-clothing.html parent"><a
 															href="/"><span>Home</span> </a>
 														</li>
-														<li onmouseover="toggleMenu(this,1)"
+														{% ifnotequal session.gambler None %}
+															{% ifnotequal session.gambler.internal None %}
+															<li onmouseover="toggleMenu(this,1)"
 															onmouseout="toggleMenu(this,0)"
 															class="level0 nav-clothing.html parent"><a
 															href="/mybet"><span>My Bet</span> </a>
-														</li>
-														<li onmouseover="toggleMenu(this,1)"
-															onmouseout="toggleMenu(this,0)"
-															class="level0 nav-clothing.html parent"><a
-															href="/allVotes/"><span>Vote</span> </a>
-														</li>
+															</li>
+															<li onmouseover="toggleMenu(this,1)"
+																onmouseout="toggleMenu(this,0)"
+																class="level0 nav-clothing.html parent"><a
+																href="/allVotes/"><span>Vote</span> </a>
+															</li>
+															{% endifnotequal %}
+														{% endifnotequal %}
 													</ul>
 
 													<script type="text/javascript">

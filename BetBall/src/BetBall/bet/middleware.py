@@ -16,7 +16,7 @@ from BetBall.bet.models import *
 class AuthMiddleware(object): 
     def process_request(self, request):
         #print request.path 
-        if request.path == '/' or request.path == '/mybet/' or request.path == '/myaccount/': 
+        if request.path == '/' or request.path == '/mybet/' or request.path == '/myaccount/' or request.path == '/allVotes/': 
             gambler =  request.session.get('gambler')
             if gambler is None:
                 c = Context({}) 

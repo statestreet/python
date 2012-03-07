@@ -1281,5 +1281,6 @@ a.minimal-price-link .price { font-weight:normal; }
 
 .footer .store-switcher{color:#3F3F3E; padding-top:5px;}
 
+label{float: left;width:100px; }
 /* ======================================================================================= */
 

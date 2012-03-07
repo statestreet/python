@@ -69,8 +69,8 @@ def gologin(request):
 def login(request):  
     r = request.POST['result']
     sr = request.session['result']
-    #if r!=str(sr):
-    #    return result("Wrong answer!")
+    if r!=str(sr):
+        return result("Wrong answer!")
     username = request.POST['username']
     m = Gambler.objects.filter(username=username)      
     pwd = md5.new(request.POST['password'])
@@ -93,7 +93,11 @@ def register(request):
     t = loader.get_template('register.htm')
     return HttpResponse(t.render(c))
     
-def saveRegister(request):  
+def saveRegister(request):
+    r = request.POST['result']
+    sr = request.session['result']
+    if r!=str(sr):
+        return result("Wrong answer!")  
     username = request.POST['username'].strip()
     email = request.POST['email'].strip()
     if validateEmail(request.POST['email']):
@@ -113,7 +117,7 @@ def saveRegister(request):
             return result("Email exsited.")
         else:
             name = request.POST['name']
-            gambler = Gambler(name=name,username=username,weibo=weibo,password=pwd.hexdigest(),state='0',regtime=datetime.datetime.now(),balance=0)
+            gambler = Gambler(name=name,username=username,weibo=weibo,password=pwd.hexdigest(),state='0',regtime=datetime.datetime.now(),balance=0,internal=0)
             gambler.save()
             return result("Please wait for admin to approve your register.")
     else:
@@ -146,8 +150,9 @@ def betMatch(request,id,r):
     if client!=None:
         expires_in = request.session.get('expires_in')
         access_token = request.session.get('access_token')
-        client.set_access_token(access_token, expires_in)
-        client.post.statuses__update(status=status)
+        if access_token!=None and expires_in!=None:
+            client.set_access_token(access_token, expires_in)
+            client.post.statuses__update(status=status)
     if len(bets)==0:
         transaction = Transaction(match=match,gambler=gambler,bet=1,bettime=now,result=r,state='0')
         transaction.save()
