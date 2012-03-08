@@ -317,6 +317,42 @@ def verifyImg(request):
     draw = ImageDraw.Draw(im, "RGBA")  
     draw.ink = 255  
     font = ImageFont.truetype("courbd.ttf", 14)
+    #干扰线 
+    createJam(draw) 
+    #散点噪音 
+    createPoints(draw) 
     draw.text((10, 5), op, font=font, fill="#000000")  
+    #图形扭曲   
+    para = [1-float(random.randint(1,2))/100,   
+             0,   
+             0,   
+             0,   
+             1-float(random.randint(1,10))/100,   
+             float(random.randint(1,2))/500,   
+             0.001,   
+             float(random.randint(1,2))/500   
+             ]   
+        #print randStr,para   
+    im = im.transform(im.size, Image.PERSPECTIVE,para)   
     im.save(mstream,"JPEG")  
     return HttpResponse(mstream.getvalue(),"image/jpg")  
+
+# 创建干扰线
+def createJam(draw):   
+    #干扰线条数 
+    jamNum = (3,5)
+    lineNum = random.randint(jamNum[0],jamNum[1])   
+    for i in range(lineNum):   
+        begin = (random.randint(0,20),random.randint(0,20))   
+        end = (random.randint(100,120),random.randint(0,20))   
+        draw.line([begin,end],fill = (255,122,0))
+
+#散点噪音  
+def createPoints(draw):   
+    pointBorder = (40,39)
+    for x in range(80):   
+        for y in range(20):   
+            flag = random.randint(0,pointBorder[0])   
+    if flag > pointBorder[1]:   
+        draw.point((x,y),fill = (0,0,0))   
+        del flag  
