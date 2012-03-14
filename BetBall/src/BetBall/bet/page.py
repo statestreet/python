@@ -131,7 +131,8 @@ def recharge(request):
 
 def logout(request):
     try:
-        del request.session['gambler']
+        #del request.session['gambler']
+        request.session.clear();
     except KeyError:
         pass
     return result("You're logged out.")

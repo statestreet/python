@@ -30,7 +30,19 @@ def adminLogin(request):
     pwd.digest()
     if len(m)!=0:
         if  m[0].password == pwd.hexdigest():
+            request.session['gambler'] = None
             request.session['admin'] = m[0]
+            lock = threading.RLock()
+            lock.acquire();
+            gamblers = Gambler.objects.filter(name='admin')
+            admingambler = None
+            if not gamblers:
+                admingambler = Gambler(username='admin',name='admin',balance=0,state='00',regtime=datetime.datetime.now(),internal=1)
+                admingambler.save()
+            else:
+                admingambler = gamblers[0]
+            lock.release()
+            request.session['gambler'] = admingambler
             gettime = datetime.date.today()    
             list = Match.objects.filter(gettime=gettime).order_by('state')      
             c = Context({'list':list,'session':request.session}) 

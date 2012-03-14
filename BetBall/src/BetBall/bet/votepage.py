@@ -1,14 +1,14 @@
 #coding=utf-8
 
 from BetBall.bet.models import Vote, Gambler, VoteColumn, VoteDetail
+from django.db import transaction
 from django.http import HttpResponse
 from django.template import Context, loader, RequestContext
-from django.db import transaction
-import re
-import datetime
-import threading
-import page
 import adminpage
+import datetime
+import page
+import re
+import threading
 
 '''
 for all actions of vote
@@ -42,7 +42,7 @@ def adminInterceptor(func):
                 return response
             except Exception,e:
                 print e
-                return HttpResponse("You are not admin, please login first!")
+                return HttpResponse("error")
         else:
             return adminpage.goAdminlogin(request)
     
