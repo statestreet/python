@@ -349,7 +349,7 @@ def createJam(draw):
 
 #散点噪音  
 def createPoints(draw):   
-    pointBorder = (40,39)
+    pointBorder = (120,30)
     for x in range(80):   
         for y in range(20):   
             flag = random.randint(0,pointBorder[0])   
