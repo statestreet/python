@@ -8,6 +8,7 @@ import re
 import datetime
 import threading
 import page
+import adminpage
 
 '''
 for all actions of vote
@@ -31,9 +32,23 @@ def interceptor(func):
             return page.gologin(request)
     
     return wapper
-            
 
-@interceptor
+
+def adminInterceptor(func):
+    def wapper(request,*args,**kargs):
+        if 'admin' in request.session and request.session['admin']:
+            try:
+                response =  func(request,*args,**kargs)
+                return response
+            except Exception,e:
+                print e
+                return HttpResponse("You are not admin, please login first!")
+        else:
+            return adminpage.goAdminlogin(request)
+    
+    return wapper
+
+@adminInterceptor
 def goNewVotePage(request):
     context = Context({'session':request.session})
     template = loader.get_template("new_votes.htm")
@@ -75,7 +90,7 @@ def voteVote(request,args = {}):
             return HttpResponse(template.render(context))
     return HttpResponse("error")
 
-@interceptor
+@adminInterceptor
 @transaction.commit_on_success  
 def saveOrUpdateVote(request):
     result = 'success'
@@ -160,7 +175,7 @@ def vote(request):
         
     return HttpResponse("error")  
 
-@interceptor
+@adminInterceptor
 def myVotes(request,**kargs):
     gambler = 'gambler' in request.session and request.session['gambler']
     votes = Vote.objects.filter(gambler=gambler)
@@ -170,6 +185,7 @@ def myVotes(request,**kargs):
     template = loader.get_template("myVotes.htm")
     return HttpResponse(template.render(context))
 
+@adminInterceptor
 def viewVote(request):
     allVoter = set([voter.username for voter in Gambler.objects.all()]);
     voteId = request.GET['id']
@@ -182,7 +198,7 @@ def viewVote(request):
     template = loader.get_template("viewVote.htm")
     return HttpResponse(template.render(context))
 
-@interceptor
+@adminInterceptor
 def delVote(request):
     result = ''
     gambler = 'gambler' in request.session and request.session['gambler']
@@ -195,7 +211,7 @@ def delVote(request):
         result = 'Delete failed'
     return myVotes(request,result=result)
 
-@interceptor
+@adminInterceptor
 def goEditVote(request):
     id = request.GET['id']
     vote = Vote.objects.get(id=id)

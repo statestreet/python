@@ -193,3 +193,10 @@ def addMatch(request):
     match = Match(gettime=datetime.datetime.now(),lega=lega,matchtime=matchtime,matchdate=matchdate,hometeam=hometeam,awayteam=awayteam,state='1',final=water)
     match.save()
     return adminresult("Add match succeed!") 
+
+
+
+def goAdminlogin(request):
+    c = Context({}) 
+    t = loader.get_template('admin_login.htm')
+    return HttpResponse(t.render(c))
