@@ -7,6 +7,7 @@ from django.db import transaction
 import re
 import datetime
 import threading
+import page
 
 '''
 for all actions of vote
@@ -27,7 +28,7 @@ def interceptor(func):
                 print e
                 return HttpResponse("error")
         else:
-            return HttpResponse("please login in!")
+            return page.gologin(request)
     
     return wapper
             
