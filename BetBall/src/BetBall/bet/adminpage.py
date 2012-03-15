@@ -171,7 +171,8 @@ def settle(request,id):
             bet.bet=-1
     bet.state='1'
     bet.save()
-    return adminresult("Transaction settled!")    
+    return adminresult("Transaction settled!")   
+ 
 def setResult(request,id,r):
     id=int(id)
     result=int(r)
@@ -191,6 +192,26 @@ def setResult(request,id,r):
         bet.state='1'
         bet.save()
     return adminresult("Set result succeed!")    
+
+def viewGambler(request):   
+    admin=request.session.get('admin')
+    if admin is None:
+        t = loader.get_template('admin_login.htm')
+        c = Context({}) 
+        return HttpResponse(t.render(c))
+    list = Gambler.objects.filter(~Q(username='admin')).order_by("-state") 
+    c = Context({'list':list,'session':request.session}) 
+    t = loader.get_template('gambler.htm')
+    return HttpResponse(t.render(c))
+
+
+def setGamblerVote(request,id,r): 
+    id=int(id)
+    r=int(r)
+    gambler = Gambler.objects.get(id=id)    
+    gambler.internal=r
+    gambler.save()
+    return adminresult("Gambler vote set!")
 
  
 def addMatch(request):  

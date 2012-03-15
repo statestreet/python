@@ -71,7 +71,16 @@
 			{% endifequal %}
 			&nbsp;
 			<button class="button" onclick="javascript:window.location='/viewGamblerBet/{{gambler.id}}'"><span>Bets</span></button>
-			
+			&nbsp;
+			{% ifequal gambler.internal None%}
+				<button class="button" onclick="javascript:window.location='/setGamblerVote/{{gambler.id}}/1'"><span>Open Vote</span></button>
+			{% else%}
+				{% ifequal gambler.internal 0%}
+					<button class="button" onclick="javascript:window.location='/setGamblerVote/{{gambler.id}}/1'"><span>Open Vote</span></button>
+				{% else%}
+					<button class="button" onclick="javascript:window.location='/setGamblerVote/{{gambler.id}/0}'"><span>Close Vote</span></button>
+				{% endifequal%}
+			{% endifequal%}
 			</td>
 		</tr>
 		{% endfor%}

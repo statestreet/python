@@ -175,17 +175,6 @@ def viewMatchBet(request):
     t = loader.get_template('index.htm')
     return HttpResponse(t.render(c))
 
-def viewGambler(request):   
-    admin=request.session.get('admin')
-    if admin is None:
-        t = loader.get_template('admin_login.htm')
-        c = Context({}) 
-        return HttpResponse(t.render(c))
-    list = Gambler.objects.all().order_by("-state") 
-    c = Context({'list':list,'session':request.session}) 
-    t = loader.get_template('gambler.htm')
-    return HttpResponse(t.render(c))
- 
 def lega(request,lega): 
     admin=request.session.get('admin')  
     if admin is None:
