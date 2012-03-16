@@ -216,15 +216,22 @@ def setGamblerVote(request,id,r):
 
  
 def addMatch(request):  
+    gambler = request.session.get('gambler')
     t =time.strptime(request.POST['matchtime'], "%Y-%m-%d %H:%M:%S")
     y,m,d,h,M,s = t[0:6]
     matchtime=datetime.datetime(y,m,d,h,M,s)
     matchdate=datetime.date(y,m,d)
     lega=request.POST['lega'];
+    legas = Lega.objects.filter(name=lega)
+    if len(legas)==0:
+        newlega = Lega(name=lega,gambler=gambler)
+        newlega.save()
+    else:
+        newlega = legas[0]
     water=request.POST['water'];
     hometeam=request.POST['hometeam'];
     awayteam=request.POST['awayteam'];
-    match = Match(gettime=datetime.datetime.now(),lega=lega,matchtime=matchtime,matchdate=matchdate,hometeam=hometeam,awayteam=awayteam,state='1',final=water)
+    match = Match(gettime=datetime.datetime.now(),lega=newlega,matchtime=matchtime,matchdate=matchdate,hometeam=hometeam,awayteam=awayteam,state='1',final=water)
     match.save()
     return adminresult("Add match succeed!") 
 
