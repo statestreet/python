@@ -93,8 +93,9 @@ def openMatch(request,id):
     if client!=None:
         expires_in = request.session.get('expires_in')
         access_token = request.session.get('access_token')
-        client.set_access_token(access_token, expires_in)
-        client.post.statuses__update(status=status)
+        if expires_in!=None and access_token!=None:
+            client.set_access_token(access_token, expires_in)
+            client.post.statuses__update(status=status)
     return adminresult("Match open!")
 
 def closeMatch(request,id):   

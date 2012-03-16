@@ -9,7 +9,7 @@ import datetime
 import page
 import re
 import threading
-
+from django.db.models import Q
 '''
 for all actions of vote
 '''
@@ -187,7 +187,7 @@ def myVotes(request,**kargs):
 
 @adminInterceptor
 def viewVote(request):
-    allVoter = set([voter.username for voter in Gambler.objects.all()]);
+    allVoter = set([voter.username for voter in Gambler.objects.filter(~Q(username='admin'),internal=1)]);
     voteId = request.GET['id']
     vote = Vote.objects.get(id=voteId)
     subVotes = VoteColumn.objects.filter(vote=vote)

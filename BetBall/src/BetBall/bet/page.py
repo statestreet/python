@@ -346,3 +346,10 @@ def createPoints(draw):
     if flag > pointBorder[1]:   
         draw.point((x,y),fill = (0,0,0))   
         del flag  
+        
+def viewLega(request):
+    gambler = request.session.get('gambler')
+    legas = Lega.objects.filter(gambler=gambler)
+    c = Context({'legas':legas,'session':request.session}) 
+    t = loader.get_template('lega.htm')
+    return HttpResponse(t.render(c))

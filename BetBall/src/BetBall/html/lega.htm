@@ -30,60 +30,35 @@
 {% include 'admin_left.htm' %}
 </div>
 <div class="home-col-2">
-<h2>Today's all game</h2>
-<button class="button" onclick="javascript:window.location='/refreshMatches'"><span>Refresh Matches!</span></button>
-<br/>
-<a href="/opened">Opened Matches</a>
+<a href="/opened">My legas</a>
 <br/>
 <table class="products-grid bestselling" id="products-grid-table">
 	<tbody>
 		<tr>
-			<td><h3>Date</h3>
-			</td>
-			<td>
-			<h3>Match Time</h3>
-			</td>
 			<td>
 			<h3>Lega</h3>
 			</td>
 			<td>
-			<h3>Team</h3>
-			</td>
-			<td>
-			<h3>Water</h3>
-			</td>
-			<td>
-			<h3>result</h3>
+			<h3>Logo</h3>
 			</td>
 			<td>
 			</td>
 		</tr>
-		{% for match in list%}
+		{% for lega in legas%}
 		<tr>
 			<td>
-			{{match.matchdate}}
+			{{lega.name}}
 			</td>
 			<td>
-			{{match.matchtime}}
+			{%ifequal lega.logo None%}
+				<img src="/image/lega/coke.gif"/>
+			{%else%}
+				<img src="{{lega.logo}}"/>
+			{%endifequal%}
 			</td>
 			<td>
-			<a href="/lega/{{match.lega.id}}">{{match.lega.name}}</a>
-			</td>
-			<td>
-			{{match.hometeam}}vs{{match.awayteam}}
-			</td>
-			<td>
-			{{match.final}}
-			</td>
-			<td>
-			{{match.result}}
-			</td>
-			<td>
-			{% ifequal match.state "0"%}
-			<button class="button" onclick="javascript:window.location='/openMatch/{{match.id}}'"><span>Open!</span></button>
-			{% else %}
-			<button class="button" onclick="javascript:window.location='/closeMatch/{{match.id}}'"><span>Close!</span></button>
-			{% endifequal %}
+				<input type="file" width="20px" style="height:20px"/>
+				<a href="">Change Logo</a>
 			</td>
 		</tr>
 		{% endfor%}
