@@ -231,7 +231,14 @@ def addMatch(request):
     water=request.POST['water'];
     hometeam=request.POST['hometeam'];
     awayteam=request.POST['awayteam'];
-    match = Match(gettime=datetime.datetime.now(),lega=newlega,matchtime=matchtime,matchdate=matchdate,hometeam=hometeam,awayteam=awayteam,state='1',final=water)
+    wagers = Wager.objects.filter(gambler=gambler,name='coke')
+    wager = None
+    if len(wagers)==0:
+        wager = Wager(gambler=gambler,name='coke')
+        wager.save()
+    else:
+        wager= wagers[0]
+    match = Match(gettime=datetime.datetime.now(),wager=wager,lega=newlega,matchtime=matchtime,matchdate=matchdate,hometeam=hometeam,awayteam=awayteam,state='1',final=water)
     match.save()
     return adminresult("Add match succeed!") 
 
