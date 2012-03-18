@@ -9,6 +9,7 @@ import datetime
 import page
 import re
 import threading
+import logging
 from django.db.models import Q
 '''
 for all actions of vote
@@ -16,13 +17,25 @@ for all actions of vote
 votePatt = re.compile("^vote-(\w+)$")
 subVotePatt = re.compile("^subVote(\d+)-(\w+)$")
 delSubVotePatt = re.compile("^del-(\d+)$")
+logger = logging.getLogger(__name__)
 
+def response(template_name,**kargs):
+    try:
+        template = loader.get_template(template_name)
+        if template:
+            logger.info('find template : %s' % template)
+            context = Context(kargs)
+            return HttpResponse(template.render(context))
+    except Exception, e:
+            print e
+    logger.info('no template : %s dispatch it for content' % template_name)
+    return HttpResponse(template_name) 
 
 def interceptor(func):
+    logger.info('interceptor function : %s ' % func.__name__);
     def wapper(request,*args,**kargs):
         if 'gambler' in request.session and request.session['gambler']:
             try:
-                sid = transaction.savepoint()
                 response =  func(request,*args,**kargs)
                 return response
             except Exception,e:
@@ -30,7 +43,6 @@ def interceptor(func):
                 return HttpResponse("error")
         else:
             return page.gologin(request)
-    
     return wapper
 
 
@@ -47,6 +59,20 @@ def adminInterceptor(func):
             return adminpage.goAdminlogin(request)
     
     return wapper
+
+def dispatch(func):
+    def wrapper(request):
+        session = request.session
+        args = {}
+        args['session'] = session
+        args['request'] = request
+        for k,v in request.GET.items():
+            args[k] = v
+        for k,v in request.POST.items():
+            args[k] = v
+        return func(**args)
+    return wrapper
+        
 
 @adminInterceptor
 def goNewVotePage(request):
@@ -156,19 +182,7 @@ def vote(request):
                         vote=vote,votecolumn=subVote,voter=voter,votetime=datetime.datetime.now())
             voteDetail.score = subResult
             voteDetail.save()
-        sumScore = 0
-        sumVoter = 0
-        vote.result = 0
-        for subVote in subVotes:
-            sumScore = 0;
-            voteDetails =  VoteDetail.objects.filter(vote=vote,votecolumn=subVote)
-            sumVoter = len(voteDetails)
-            for voteDetail in voteDetails:
-                sumScore += voteDetail.score
-            subVote.result = sumScore/sumVoter
-            vote.result += subVote.result
-            subVote.save()
-        vote.save() 
+        reflashVoteResult(vote)
         return voteVote(request,{'voteResult':'success'})
     finally:
         lock.release()
@@ -187,11 +201,11 @@ def myVotes(request,**kargs):
 
 @adminInterceptor
 def viewVote(request):
-    allVoter = set([voter.username for voter in Gambler.objects.filter(~Q(username='admin'),internal=1)]);
+    allVoter = set([voter.name for voter in Gambler.objects.filter(~Q(username='admin'),internal=1)]);
     voteId = request.GET['id']
     vote = Vote.objects.get(id=voteId)
     subVotes = VoteColumn.objects.filter(vote=vote)
-    voted = set([voteDetail.voter.username for voteDetail in VoteDetail.objects.filter(vote=vote,votecolumn=subVotes[0])])
+    voted = set([voteDetail.voter.name for voteDetail in VoteDetail.objects.filter(vote=vote,votecolumn=subVotes[0])])
     nonVoted = allVoter - voted
     context = Context({'session':request.session,'subVotes':subVotes,
                        'voted':','.join(voted),'nonVoted':','.join(nonVoted),'vote':vote})
@@ -199,6 +213,7 @@ def viewVote(request):
     return HttpResponse(template.render(context))
 
 @adminInterceptor
+@transaction.commit_on_success  
 def delVote(request):
     result = ''
     gambler = 'gambler' in request.session and request.session['gambler']
@@ -210,6 +225,26 @@ def delVote(request):
     else:
         result = 'Delete failed'
     return myVotes(request,result=result)
+
+@adminInterceptor
+@dispatch
+def voteDetail(id,**kargs):
+    vote = Vote.objects.get(id = id)
+    voted = set([voteDetail.voter for voteDetail in VoteDetail.objects.filter(vote=vote)])
+    return response("vote_detail.htm",voted=voted,vote=vote)
+
+@adminInterceptor
+@dispatch
+def delVoter(id,voteId,**kargs):
+    voter = Gambler.objects.get(id=id)
+    vote  = Vote.objects.get(id = voteId)
+    if voter and vote:
+        VoteDetail.objects.filter(voter = voter,vote = vote).delete()
+        reflashVoteResult(vote)
+        return response("success")
+    else :
+        return response("falied")
+    
 
 @adminInterceptor
 def goEditVote(request):
@@ -234,8 +269,23 @@ def isVoted(id):
         return False
     else :
         return True
-
-   
+    
+def reflashVoteResult(vote):
+    vote.result = 0
+    subVotes = VoteColumn.objects.filter(vote = vote)
+    for subVote in subVotes:
+        sumScore = 0;
+        voteDetails =  VoteDetail.objects.filter(vote=vote,votecolumn=subVote)
+        sumVoter = len(voteDetails)
+        if not sumVoter :
+            subVote.result = sumScore
+        else :
+            for voteDetail in voteDetails:
+                sumScore += voteDetail.score
+                subVote.result = sumScore/sumVoter
+        vote.result += subVote.result
+        subVote.save()
+    vote.save() 
         
 
     

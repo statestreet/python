@@ -29,7 +29,7 @@
 				imgArray = tr.getElementsByTagName("img")
 				if (imgArray && imgArray.length != 0)
 				{
-					score = parseInt(tr.getElementsByTagName("td")[3].innerHTML)/parseInt(tr.getElementsByTagName("td")[1].innerHTML)*5
+					score = parseFloat(tr.getElementsByTagName("td")[3].innerHTML)/parseFloat(tr.getElementsByTagName("td")[1].innerHTML) * 5
 					for(var j=0; j<score; j++)
 					{
 						imgArray[j].src = imgSrc_2
@@ -78,7 +78,7 @@
                 }
                 target.parentNode.onmouseout = function() 
                 {
-                    var imgnum = parseInt(target.parentNode.previousSibling.value);
+                    var imgnum = parseFloat(target.parentNode.previousSibling.value);
                     for( n = 0; n < imgArray.length; n++) 
                     {
                         imgArray[n].src = imgSrc;

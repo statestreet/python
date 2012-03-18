@@ -1,0 +1,68 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<title>vote</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="description" content="Default Description" />
+<meta name="keywords" content="Magento, Varien, E-commerce" />
+<meta name="robots" content="INDEX,FOLLOW" />
+<script type="text/javascript" src="/image/lei.js"></script>
+<script type="text/javascript">
+var delVoter = function(node)
+{
+	window.confirm('delete?');
+	var del = function(data)
+	{
+		if(data == 'success')
+		{
+			node.parentNode.parentNode.parentNode.removeChild(node.parentNode.parentNode);
+			window.opener.location.reload();
+		}
+		alert(data)
+	}
+	
+	request(node.href,del)
+}
+
+</script>
+<link rel="stylesheet" type="text/css" href="/image/reset.css"
+	media="all" />
+<link rel="stylesheet" type="text/css" href="/image/styles.css"
+	media="all" />
+<link rel="stylesheet" type="text/css" href="/image/clears.css"
+	media="all" />
+<link rel="stylesheet" type="text/css" href="/image/print.css"
+	media="print" />
+<link rel="stylesheet" type="text/css" href="/image/vote.css" />
+</head>
+<h3 class="h3">{{vote.name}}</h3>
+<fieldset class="fieldset">
+<div class="votes-table">
+<table>
+	<tbody>
+		<tr class="votes-tr">
+			<th>
+			username
+			</th>
+			<th>
+			name
+			</th>
+			<th>
+            operation
+           </th>
+		</tr>
+		{% for voter in voted%}
+        <tr>
+            <td >{{voter.username}}</td>
+            <td >{{voter.name}}</td>
+            <td id="{{voter.id}}"><a href="deleteVoter?id={{voter.id}}&voteId={{vote.id}}" onclick = "delVoter(this); return false;">delete</a></td>
+        </tr>
+        {% endfor%}
+	</tbody>
+</table>
+</div>
+</fieldset>
+</form>
+</div>
+</body>
+</html>

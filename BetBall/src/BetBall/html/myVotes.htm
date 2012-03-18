@@ -81,7 +81,7 @@ var goEdit = function(id)
 			<th>
 			result
 			</th>
-			<th colspan="3">operation</th>
+			<th colspan="4">operation</th>
 		</tr>
 		{% for vote in votes%}
         <tr id="vote.id">
@@ -92,6 +92,7 @@ var goEdit = function(id)
             <td>{{vote.score}}</td>
             <td>{{vote.result}}</td>
             <td><a href ="/viewVote?id={{vote.id}}" onclick="openw(this.href); return false;">view</a></td>
+            <td><a href="/voteDetail?id={{vote.id}}" onclick="openw(this.href); return false;">detail</a></td>
             <td><a href="/goEditVote?id={{vote.id}}" onclick="goEdit({{vote.id}}); return false;">edit</a></td>
             <td><a href="/delVote?id={{vote.id}}" onclick="return window.confirm('delete?');">delete</a></td>
         </tr>
