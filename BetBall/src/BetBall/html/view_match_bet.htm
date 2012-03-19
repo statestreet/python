@@ -27,7 +27,7 @@
 <div class="col-main">
 <div class="home-content-wrapper">
 <div class="home-col-1">
-{% include 'left.htm' %}
+{% include 'admin_left.htm' %}
 </div>
 <div class="home-col-2">
 <h2>({{match.lega.name}}) {{match.hometeam}}vs{{match.awayteam}}'s bet</h2>
@@ -48,11 +48,13 @@
 			</td>
 			<td>
 			</td>
+			<td>
+			</td>
 		</tr>
 		{% for bet in list%}
 		<tr>
 			<td>
-			<a href="/viewUser/{{bet.gambler.id}}">({{bet.gambler.username}}){{bet.gambler.name}}</a>
+			({{bet.gambler.username}}){{bet.gambler.name}}
 			</td>
 			<td>
 			{{bet.result}}
@@ -62,6 +64,14 @@
 			</td>
 			<td>
 			{{bet.bet}}
+			</td>
+			<td>
+			{% ifequal bet.state "0"%}
+			<button class="button" onclick="javascript:window.location='/settle/{{bet.id}}'"><span>Settle</span></button>
+			{% endifequal %}
+			{% ifequal bet.state "1"%}
+			<button class="button" onclick="javascript:window.location='/clean/{{bet.id}}'"><span>Clean</span></button>
+			{% endifequal %}
 			</td>
 		</tr>
 		{% endfor%}

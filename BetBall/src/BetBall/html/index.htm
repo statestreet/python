@@ -65,7 +65,9 @@
 			<button class="button" onclick="window.location='/bet/{{match.id}}/1'"><span>平</span></button>
 			</a>&nbsp;<a href="/bet/{{match.id}}/0">
 			<button class="button" onclick="window.location='/bet/{{match.id}}/0'"><span>客</span></button>
-			</a></td>
+			</a>
+			<br/> <a href="/matchBets/{{match.id}}" target="_blank">View Bets</a>
+			</td>
 			{% endfor%}
 		</tr>
 	</tbody>

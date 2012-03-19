@@ -25,49 +25,55 @@
 <div class="main col1-layout">
 <div class="main-border">
 <div class="col-main">
+
 <div class="home-content-wrapper">
-<div class="home-col-1">
-{% include 'left.htm' %}
-</div>
+<div class="home-col-1">{% include 'left.htm' %}</div>
 <div class="home-col-2">
-<h2>({{match.lega.name}}) {{match.hometeam}}vs{{match.awayteam}}'s bet</h2>
-<br/>
+<h2>{{gambler.username}}({{gambler.username}})'s profile &nbsp;{% ifequal isFriend 0 %}<a href="/addFriend/{{gambler.id}}">Add to friend</a>{%endifequal%}</h2>
+<form id="loginForm" action="/updateAccount/" method="post">
+{% csrf_token %}
 <table class="products-grid bestselling" id="products-grid-table">
 	<tbody>
 		<tr>
-			<td><h3>Gambler</h3>
-			</td>
 			<td>
-			<h3>Bet</h3>
-			</td>
-			<td>
-			<h3>Match Result</h3>
-			</td>
-			<td>
-			<h3>Cokes</h3>
-			</td>
-			<td>
+			<h3 class="product-name"><a href="#" title="balance">His/her bets</a>
+			</h3>
+			<div class="price-box"><span class="regular-price"
+				id="product-price-5"><span class="price">{{gambler.balance}}
+			Cokes</span> </span></div>
 			</td>
 		</tr>
-		{% for bet in list%}
 		<tr>
 			<td>
-			<a href="/viewUser/{{bet.gambler.id}}">({{bet.gambler.username}}){{bet.gambler.name}}</a>
-			</td>
-			<td>
-			{{bet.result}}
-			</td>
-			<td>
-			{{bet.match.result}}
-			</td>
-			<td>
-			{{bet.bet}}
+			<table class="products-grid bestselling"
+									id="products-grid-table">
+									<tbody>
+										<tr>
+											<td><h3>Date/Time</h3></td>
+											<td><h3>Match</h3></td>
+											<td><h3>Water</h3></td>
+											<td><h3>My bet</h3></td>
+											<td><h3>Cokes</h3></td>
+											<td><h3>Result</h3></td>
+										</tr>
+										{% for bet in bets%}
+										<tr>
+											<td>{{bet.match.matchtime}}</td>
+											<td>{{bet.match.lega.name}}-{{bet.match.hometeam}}VS{{bet.match.awayteam}}</td>
+											<td>{{bet.match.final}}</td>
+											<td>{{bet.result}}</td>
+											<td>{{bet.bet}}</td>
+											<td>{{bet.match.result}}</td>
+										</tr>
+										{% endfor%}
+									</tbody>
+								</table>
 			</td>
 		</tr>
-		{% endfor%}
-
+		
 	</tbody>
 </table>
+</form>
 </div>
 <div class="clear"></div>
 </div>

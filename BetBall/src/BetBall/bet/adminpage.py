@@ -242,7 +242,14 @@ def addMatch(request):
     match.save()
     return adminresult("Add match succeed!") 
 
-
+    
+def viewMatchBets(request,id):
+    id=int(id)
+    match = Match.objects.get(id=id) 
+    bets = Transaction.objects.filter(match=match).order_by('-bettime') 
+    c = Context({'list':bets,'match':match,'session':request.session}) 
+    t = loader.get_template('view_match_bet.htm')
+    return HttpResponse(t.render(c))
 
 def goAdminlogin(request):
     c = Context({}) 

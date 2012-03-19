@@ -259,14 +259,6 @@ def cancelBet(request,id):
     else:  
         transaction.delete() 
         return result("Transaction clean!")     
-    
-def viewMatchBets(request,id):
-    id=int(id)
-    match = Match.objects.get(id=id) 
-    bets = Transaction.objects.filter(match=match).order_by('-bettime') 
-    c = Context({'list':bets,'match':match,'session':request.session}) 
-    t = loader.get_template('match_bet.htm')
-    return HttpResponse(t.render(c))
 
 def setSession(c,request):
     c['session']=request.session
@@ -352,4 +344,51 @@ def viewLega(request):
     legas = Lega.objects.filter(gambler=gambler)
     c = Context({'legas':legas,'session':request.session}) 
     t = loader.get_template('lega.htm')
+    return HttpResponse(t.render(c))
+
+def matchBets(request,id):
+    id=int(id)
+    match = Match.objects.get(id=id) 
+    bets = Transaction.objects.filter(match=match).order_by('-bettime') 
+    c = Context({'list':bets,'match':match,'session':request.session}) 
+    t = loader.get_template('match_bet.htm')
+    return HttpResponse(t.render(c))
+
+
+def viewUser(request,id):
+    id=int(id)
+    gambler =  Gambler.objects.get(id=id) 
+    bets = Transaction.objects.filter(gambler=gambler).order_by('-bettime')
+    me = request.session.get('gambler')   
+    friends = Friend.objects.filter(gambler=me,friend=gambler)
+    isFriend= 0
+    if len(friends)==0:
+        isFriend= 0
+    else:
+        isFriend= 1
+    if me.id==gambler.id:
+        isFriend= 1
+    c = Context({'gambler':gambler,'bets':bets,'isFriend':isFriend}) 
+    t = loader.get_template('view_user.htm')
+    return HttpResponse(t.render(c))
+
+def addFriend(request,id):
+    id=int(id)
+    friend =  Gambler.objects.get(id=id)    
+    gambler = request.session.get('gambler')
+    friends = Friend.objects.filter(gambler=gambler,friend=friend)
+    if gambler.id==friend.id:
+       return result("You can't add yourself to friend" ) 
+    if len(friends)==0:
+        f = Friend(gambler=gambler,friend=friend,state='10')
+        f.save()
+        return result("Wait for "+friend.username+" to confirm your request" )
+    else:
+        return result("You are already add "+friend.username+" to friend list.")
+
+def myfriends(request):
+    gambler = request.session.get('gambler')
+    friends = Friend.objects.filter(gambler=gambler)
+    c = Context({'friends':friends}) 
+    t = loader.get_template('myfriends.htm')
     return HttpResponse(t.render(c))
