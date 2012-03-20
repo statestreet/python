@@ -13,6 +13,7 @@ from django.http import *
 from BetBall.bet.timer import *
 from BetBall.bet.models import *  
 import random, Image, ImageDraw, ImageFont, md5, datetime, ImageColor, StringIO
+from itertools import chain
 
 #APP_KEY = '3118024522' # app key of betball
 #APP_SECRET = '95895b5b4556994a798224902af57d30' # app secret of betball
@@ -24,16 +25,28 @@ CALLBACK_URL = 'http://127.0.0.1:8888/weiboLoginBack' # callback url
 client = APIClient(app_key=APP_KEY, app_secret=APP_SECRET, redirect_uri=CALLBACK_URL)
 SITE_URL = 'http://www.noya35.com'
 
-def listTodayMatches(request):    
+def listTodayMatches(request):   
+    #admin's match and friends match 
     gambler =  request.session.get('gambler')
     if gambler is None:
         c = Context({'session':request.session}) 
         t = loader.get_template('login.htm')
         return HttpResponse(t.render(c))
     else:
-        now = datetime.datetime.now()  
-        list = Match.objects.filter(state='1', matchtime__gte=now)     
-        c = Context({'list':list,'session':request.session}) 
+        now = datetime.datetime.now() 
+        gamblers = Gambler.objects.filter(name='admin')
+        admingambler=None
+        if len(gamblers)==0:
+            admingambler = Gambler(username='admin',name='admin',balance=0,state='00',regtime=datetime.datetime.now(),internal=1)
+            admingambler.save()
+        else:
+            admingambler= gamblers[0] 
+        adminmatches = list(Match.objects.filter(state='1', matchtime__gte=now,gambler=admingambler))     
+        friends = Friend.objects.filter(gambler=gambler)
+        for friend in friends:
+            friendmatches = list(Match.objects.filter(Q(state='1')&Q(matchtime__gte=now)&Q(gambler=friend)))
+            result_list = list(chain(adminmatches,friendmatches))
+        c = Context({'list':result_list,'session':request.session}) 
         t = loader.get_template('index.htm')
         return HttpResponse(t.render(c))
     
@@ -378,7 +391,7 @@ def addFriend(request,id):
     gambler = request.session.get('gambler')
     friends = Friend.objects.filter(gambler=gambler,friend=friend)
     if gambler.id==friend.id:
-       return result("You can't add yourself to friend" ) 
+        return result("You can't add yourself to friend" ) 
     if len(friends)==0:
         f = Friend(gambler=gambler,friend=friend,state='10')
         f.save()
@@ -386,9 +399,63 @@ def addFriend(request,id):
     else:
         return result("You are already add "+friend.username+" to friend list.")
 
+def dropFriend(request,id):
+    id=int(id)
+    friend =  Friend.objects.get(id=id)
+    friend.delete()
+    return result("Friend dropped.")
+
 def myfriends(request):
     gambler = request.session.get('gambler')
     friends = Friend.objects.filter(gambler=gambler)
-    c = Context({'friends':friends}) 
+    c = Context({'friends':friends,'session':request.session}) 
     t = loader.get_template('myfriends.htm')
     return HttpResponse(t.render(c))
+
+def mywager(request):
+    gambler = request.session.get('gambler')
+    wagers = Wager.objects.filter(gambler=gambler)
+    c = Context({'wagers':wagers,'session':request.session}) 
+    t = loader.get_template('mywager.htm')
+    return HttpResponse(t.render(c))
+
+def addwager(request):
+    name = request.POST['name']
+    if name=='':
+        return result("Must have a name.")
+    else:
+        gambler = request.session.get('gambler')
+        wager = Wager(name=name,gambler=gambler)
+        wager.save()
+        return result("Wager added" )
+    
+def mymatches(request):
+    gambler = request.session.get('gambler')
+    matches = Match.objects.filter(gambler=gambler).order_by('-state','matchtime') 
+    wagers = Wager.objects.filter(gambler=gambler)
+    c = Context({'matches':matches,'wagers':wagers,'session':request.session}) 
+    t = loader.get_template('mymatches.htm')
+    return HttpResponse(t.render(c))  
+
+def addmymatch(request):
+    gambler = request.session.get('gambler')
+    t =time.strptime(request.POST['matchtime'], "%Y-%m-%d %H:%M:%S")
+    y,m,d,h,M,s = t[0:6]
+    matchtime=datetime.datetime(y,m,d,h,M,s)
+    matchdate=datetime.date(y,m,d)
+    lega=request.POST['lega'];
+    wager=request.POST['wager'];
+    wager_id =int(wager)
+    legas = Lega.objects.filter(name=lega,gambler=gambler)
+    if len(legas)==0:
+        newlega = Lega(name=lega,gambler=gambler)
+        newlega.save()
+    else:
+        newlega = legas[0]
+    water=request.POST['water'];
+    hometeam=request.POST['hometeam'];
+    awayteam=request.POST['awayteam'];
+    wager = Wager.objects.get(id=wager_id)
+    match = Match(gambler=gambler,gettime=datetime.datetime.now(),wager=wager,lega=newlega,matchtime=matchtime,matchdate=matchdate,hometeam=hometeam,awayteam=awayteam,state='1',final=water)
+    match.save()
+    return result("Add match succeed!")   

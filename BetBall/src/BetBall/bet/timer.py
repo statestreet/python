@@ -60,7 +60,7 @@ def getMatches():
             newlega.save()
         else:
             newlega = legas[0]
-        matchs = Match.objects.filter(lega=newlega,matchdate=matchdate,hometeam=hometeam,awayteam=awayteam)
+        matchs = Match.objects.filter(gambler=admingambler,lega=newlega,matchdate=matchdate,hometeam=hometeam,awayteam=awayteam)
         wagers = Wager.objects.filter(gambler=admingambler,name='coke')
         wager = None
         if len(wagers)==0:
@@ -70,7 +70,7 @@ def getMatches():
             wager= wagers[0]
         
         if len(matchs)==0:
-            match = Match(wager=wager,gettime=datetime.datetime.now(),lega=newlega,matchtime=matchtime,matchdate=matchdate,hometeam=hometeam,awayteam=awayteam,final=final,state='0',result=result)
+            match = Match(gambler=admingambler,wager=wager,gettime=datetime.datetime.now(),lega=newlega,matchtime=matchtime,matchdate=matchdate,hometeam=hometeam,awayteam=awayteam,final=final,state='0',result=result)
             match.save()
         else:
             match = matchs[0]
@@ -81,10 +81,7 @@ def getMatches():
             if match.result == None:
                 match.result=result
             match.save()
-
-        
         print lega,' - ' ,matchtime,' - ' ,hometeam,' - ' ,awayteam,' - ' ,final,' - ' ,result
-    
     global t        #Notice: use global variable!
     t = threading.Timer(3600.0, getMatches)
     t.start()

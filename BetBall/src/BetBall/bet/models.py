@@ -44,6 +44,7 @@ class Match(models.Model):
     state = models.CharField(max_length=2)
     result = models.CharField(max_length=5,null=True)
     gettime = models.DateField()
+    gambler = models.ForeignKey(Gambler)
 
 class Group(models.Model):
     gambler = models.ForeignKey(Gambler)

@@ -61,14 +61,15 @@ def adminLogout(request):
     return result("You're logged out.")
 
 
-def admin(request): 
+def admin(request):
+    gambler = request.session.get('gambler') 
     admin=request.session.get('admin')  
     if admin is None:
         t = loader.get_template('admin_login.htm')
         c = Context({}) 
         return HttpResponse(t.render(c))
     now = datetime.datetime.now()    
-    list = Match.objects.filter(matchtime__gte=now).order_by('-state','matchtime')        
+    list = Match.objects.filter(matchtime__gte=now,gambler=gambler).order_by('-state','matchtime')        
     c = Context({'list':list,'session':request.session}) 
     t = loader.get_template('admin.htm')
     return HttpResponse(t.render(c))
@@ -122,9 +123,10 @@ def closeGambler(request,id):
     
 def opened(request):   
     admin=request.session.get('admin')
+    gambler = request.session.get('gambler') 
     if admin is None:
         return adminresult("You've not admin!")
-    list = Match.objects.filter(state='1').order_by('-gettime')      
+    list = Match.objects.filter(state='1',gambler=gambler).order_by('-gettime')      
     c = Context({'list':list,'session':request.session}) 
     t = loader.get_template('opened.htm')
     return HttpResponse(t.render(c))
@@ -238,7 +240,7 @@ def addMatch(request):
         wager.save()
     else:
         wager= wagers[0]
-    match = Match(gettime=datetime.datetime.now(),wager=wager,lega=newlega,matchtime=matchtime,matchdate=matchdate,hometeam=hometeam,awayteam=awayteam,state='1',final=water)
+    match = Match(gambler=gambler,gettime=datetime.datetime.now(),wager=wager,lega=newlega,matchtime=matchtime,matchdate=matchdate,hometeam=hometeam,awayteam=awayteam,state='1',final=water)
     match.save()
     return adminresult("Add match succeed!") 
 
