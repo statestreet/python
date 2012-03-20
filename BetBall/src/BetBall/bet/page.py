@@ -41,11 +41,12 @@ def listTodayMatches(request):
             admingambler.save()
         else:
             admingambler= gamblers[0] 
-        adminmatches = list(Match.objects.filter(state='1', matchtime__gte=now,gambler=admingambler))     
+        adminmatches = list(Match.objects.filter(state='1', matchtime__gte=now,gambler=admingambler))  
+        result_list = adminmatches 
         friends = Friend.objects.filter(gambler=gambler)
         for friend in friends:
             friendmatches = list(Match.objects.filter(Q(state='1')&Q(matchtime__gte=now)&Q(gambler=friend)))
-            result_list = list(chain(adminmatches,friendmatches))
+            result_list = list(chain(result_list,friendmatches))
         c = Context({'list':result_list,'session':request.session}) 
         t = loader.get_template('index.htm')
         return HttpResponse(t.render(c))
