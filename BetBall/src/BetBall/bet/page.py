@@ -45,7 +45,7 @@ def listTodayMatches(request):
         result_list = adminmatches 
         friends = Friend.objects.filter(gambler=gambler)
         for friend in friends:
-            friendmatches = list(Match.objects.filter(Q(state='1')&Q(matchtime__gte=now)&Q(gambler=friend)))
+            friendmatches = list(Match.objects.filter(Q(state='1')&Q(matchtime__gte=now)&Q(gambler=friend.friend)))
             result_list = list(chain(result_list,friendmatches))
         c = Context({'list':result_list,'session':request.session}) 
         t = loader.get_template('index.htm')
@@ -432,7 +432,7 @@ def addwager(request):
     
 def mymatches(request):
     gambler = request.session.get('gambler')
-    matches = Match.objects.filter(gambler=gambler).order_by('-state','matchtime') 
+    matches = Match.objects.filter(gambler=gambler,state='1').order_by('-state','matchtime') 
     wagers = Wager.objects.filter(gambler=gambler)
     c = Context({'matches':matches,'wagers':wagers,'session':request.session}) 
     t = loader.get_template('mymatches.htm')
