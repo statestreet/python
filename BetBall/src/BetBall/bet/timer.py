@@ -82,11 +82,11 @@ def getMatches():
                 match.result=result
             match.save()
         print lega,' - ' ,matchtime,' - ' ,hometeam,' - ' ,awayteam,' - ' ,final,' - ' ,result
-    global t        #Notice: use global variable!
-    t = threading.Timer(3600.0, getMatches)
-    t.start()
-
-t = threading.Timer(3600.0, getMatches)
-t.start()
+#    global t        #Notice: use global variable!
+#    t = threading.Timer(3600.0, getMatches)
+#    t.start()
+#
+#t = threading.Timer(3600.0, getMatches)
+#t.start()
 
 
