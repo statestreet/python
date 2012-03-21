@@ -67,18 +67,21 @@
 															class="level0 nav-clothing.html parent"><a
 															href="/"><span>Home</span> </a>
 														</li>
-														{% ifnotequal session.gambler None %}
-															{% ifnotequal session.gambler.internal None %}
-															<li onmouseover="toggleMenu(this,1)"
-															onmouseout="toggleMenu(this,0)"
-															class="level0 nav-clothing.html parent"><a
-															href="/mybet"><span>My Bet</span> </a>
-															</li>
-															<li onmouseover="toggleMenu(this,1)"
+														<li onmouseover="toggleMenu(this,1)"
 																onmouseout="toggleMenu(this,0)"
 																class="level0 nav-clothing.html parent"><a
-																href="/allVotes/"><span>Vote</span> </a>
-															</li>
+																href="/mybet"><span>My Bet</span> </a>
+																</li>
+														{% ifnotequal session.gambler None %}
+															{% ifnotequal session.gambler.internal None %}
+																{% ifequal session.gambler.internal 1 %}
+																
+																<li onmouseover="toggleMenu(this,1)"
+																	onmouseout="toggleMenu(this,0)"
+																	class="level0 nav-clothing.html parent"><a
+																	href="/allVotes/"><span>Vote</span> </a>
+																</li>
+																{% endifequal %}
 															{% endifnotequal %}
 														{% endifnotequal %}
 													</ul>
