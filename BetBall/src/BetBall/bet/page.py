@@ -81,10 +81,10 @@ def gologin(request):
     return HttpResponse(t.render(c))
 
 def login(request):  
-    r = request.POST['result']
-    sr = request.session['result']
-    if r!=str(sr):
-        return result("Wrong answer!")
+#    r = request.POST['result']
+#    sr = request.session['result']
+#    if r!=str(sr):
+#        return result("Wrong answer!")
     username = request.POST['username']
     m = Gambler.objects.filter(username=username)      
     pwd = md5.new(request.POST['password'])
@@ -108,10 +108,10 @@ def register(request):
     return HttpResponse(t.render(c))
     
 def saveRegister(request):
-    r = request.POST['result']
-    sr = request.session['result']
-    if r!=str(sr):
-        return result("Wrong answer!")  
+#    r = request.POST['result']
+#    sr = request.session['result']
+#    if r!=str(sr):
+#        return result("Wrong answer!")  
     username = request.POST['username'].strip()
     email = request.POST['email'].strip()
     if validateEmail(request.POST['email']):
