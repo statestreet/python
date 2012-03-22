@@ -102,7 +102,7 @@ def openMatch(request,id):
 def closeMatch(request,id):   
     id=int(id)
     match = Match.objects.get(id=id)
-    match.state='0'
+    match.state='2'
     match.save()
     return adminresult("Match close!")
 
