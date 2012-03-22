@@ -75,7 +75,7 @@ def listHistoryMatches(request,page):
             admingambler.save()
         else:
             admingambler= gamblers[0] 
-        result_list = Match.objects.filter(state='1', matchtime__lte=now,gambler=admingambler)
+        result_list = Match.objects.filter(matchtime__lte=now,gambler=admingambler)
         paginator = Paginator(result_list,4)  
         try:  
             matchList = paginator.page(page)  
