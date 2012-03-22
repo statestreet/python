@@ -6,8 +6,20 @@
 <meta name="description" content="Default Description" />
 <meta name="keywords" content="Magento, Varien, E-commerce" />
 <meta name="robots" content="INDEX,FOLLOW" />
+<script type="text/javascript" src="/image/jquery.min.js"></script>
 <script type="text/javascript">
-	
+$(document).ready(function(){
+			$("#checkAll").click(function(){
+				if(this.checked)
+					$("input[type='checkbox']").each(function(i){
+							this.checked = true;
+					});
+				else
+					$("input[type='checkbox']").each(function(i){
+						this.checked = false;
+				});
+			});
+	});
 </script>
 
 <link rel="stylesheet" type="text/css" href="/image/reset.css"
@@ -32,6 +44,9 @@
 <table class="products-grid bestselling" id="products-grid-table">
 	<tbody>
 		<tr>
+			<td><input
+								type="checkbox" id="checkAll" />
+			</td>
 			<td>
 			<h3>Date</h3>
 			</td>
@@ -54,6 +69,7 @@
 		</tr>
 		{% for match in list%}
 		<tr>
+			<td><input type="checkbox" name="matchIds"	value="{{match.id}}" /></td>
 			<td>{{match.matchdate}}</td>
 			<td>{{match.matchtime}}</td>
 			<td>{{match.lega.name}}</td>
@@ -83,7 +99,10 @@
 		</tr>
 		{% endfor%}
 		<tr>
-			<td colspan="7">
+			<td colspan="8"><button type="button" class="button" id="statistic"><span>Statistic</span></td>
+		</tr>
+		<tr>
+			<td colspan="8">
 			<form id="loginForm" action="/addMatch/" method="post">
 			{% csrf_token %}
 			<table class="products-grid bestselling">

@@ -16,6 +16,7 @@ urlpatterns = patterns('',
     # Example:
     # (r'^BetBall/', include('BetBall.foo.urls')),
      (r'^$',  listTodayMatches),     
+     (r'^history/(\w+)/$', listHistoryMatches),
      (r'^matches/', listTodayMatches),
      (r'^opened/', opened),
      (r'^viewMatches/(?P<year>\d{4})-(?P<month>\d{2})-(?P<date>\d{2})/$', viewMatches),

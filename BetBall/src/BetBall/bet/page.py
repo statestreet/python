@@ -14,6 +14,7 @@ from BetBall.bet.timer import *
 from BetBall.bet.models import *  
 import random, Image, ImageDraw, ImageFont, md5, datetime, ImageColor, StringIO
 from itertools import chain
+from django.core.paginator import *
 
 #APP_KEY = '3118024522' # app key of betball
 #APP_SECRET = '95895b5b4556994a798224902af57d30' # app secret of betball
@@ -50,6 +51,43 @@ def listTodayMatches(request):
         c = Context({'list':result_list,'session':request.session}) 
         t = loader.get_template('index.htm')
         return HttpResponse(t.render(c))
+
+
+def listHistoryMatches(request,page):   
+    after_range_num = 5 
+    bevor_range_num = 4 
+    if page==None:
+        page=1
+    else:
+        page=int(page)
+    #admin's match and friends match 
+    gambler =  request.session.get('gambler')
+    if gambler is None:
+        c = Context({'session':request.session}) 
+        t = loader.get_template('login.htm')
+        return HttpResponse(t.render(c))
+    else:
+        now = datetime.datetime.now() 
+        gamblers = Gambler.objects.filter(name='admin')
+        admingambler=None
+        if len(gamblers)==0:
+            admingambler = Gambler(username='admin',name='admin',balance=0,state='00',regtime=datetime.datetime.now(),internal=1)
+            admingambler.save()
+        else:
+            admingambler= gamblers[0] 
+        result_list = Match.objects.filter(state='1', matchtime__lte=now,gambler=admingambler)
+        paginator = Paginator(result_list,4)  
+        try:  
+            matchList = paginator.page(page)  
+        except(EmptyPage,InvalidPage,PageNotAnInteger):  
+            matchList = paginator.page(1) 
+        if page >= after_range_num:  
+            page_range = paginator.page_range[page-after_range_num:page+bevor_range_num]  
+        else:  
+            page_range = paginator.page_range[0:int(page)+bevor_range_num]         
+        c = Context({'list':matchList,'page_range':page_range,'session':request.session}) 
+        t = loader.get_template('history.htm')
+        return HttpResponse(t.render(c))  
     
 def viewMatches(request,year,month,date):
     year=int(year)    

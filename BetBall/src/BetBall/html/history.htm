@@ -29,12 +29,12 @@
 <div class="home-content-wrapper">
 <div class="home-col-1">{% include 'left.htm' %}</div>
 <div class="home-col-2">
-<h2>Today's game</h2>
-<a href="/history/1">History game</a>
+<h2>History game</h2>
+<a href="/">Today's game</a>
 <table class="products-grid bestselling" id="products-grid-table">
 	<tbody>
 		<tr>
-			{% for match in list%}
+			{% for match in list.object_list%}
 			<td>
 			<h3 class="product-name"><a href="http://www.google.com.hk/search?q={{match.hometeam}}+{{match.awayteam}}"
 				title="{{match.hometeam}}vs{{match.awayteam}}"  target="_blank">({{match.lega.name}}) {{match.hometeam}}vs{{match.awayteam}}</a>
@@ -69,6 +69,15 @@
 			<br/> <a href="/matchBets/{{match.id}}">View Bets</a>
 			</td>
 			{% endfor%}
+		</tr>
+		<tr>
+			<td>{% for p in page_range %}  
+{% ifequal p articleList.number %}  
+<span>{{p}}</span>  
+{% else %}  
+<a href="/history/{{p}}" title="第{{p}}页">{{p}}</a>  
+{% endifequal %}  
+{% endfor %}</td>
 		</tr>
 	</tbody>
 </table>

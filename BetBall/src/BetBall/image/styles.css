@@ -1248,7 +1248,7 @@ a.minimal-price-link .price { font-weight:normal; }
 .home-content-wrapper{background:url(images/main-border.gif) 213px top repeat-y;}
 .home-content-wrapper h2{ margin-bottom:15px; font-weight:bold; color:#414141;}
 .home-col-1{width:168px; float:left; padding:17px 27px 14px 18px; border-top:1px solid #EBEBEB; margin-top:1px;}
-.home-col-2{width:607px; float:right; padding:16px 18px 24px 18px; border-top:1px solid #EBEBEB; margin-top:1px;}
+.home-col-2{width:607px; float:right; padding:16px 0px 24px 18px; border-top:1px solid #EBEBEB; margin-top:1px;}
 .home-col-1 li{line-height:1em; padding-bottom:4px;}
 .home-col-1 li a{color:#626262; text-decoration:none;}
 .home-col-1 li a:hover{text-decoration:underline;}
