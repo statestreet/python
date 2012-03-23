@@ -4,7 +4,7 @@
 <title>Bet for Coke!</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <meta name="description" content="Default Description" />
-<meta name="keywords" content="Magento, Varien, E-commerce" />
+
 <meta name="robots" content="INDEX,FOLLOW" />
 <script type="text/javascript" src="/image/jquery.min.js"></script>
 <script type="text/javascript">
@@ -18,6 +18,22 @@ $(document).ready(function(){
 					$("input[type='checkbox']").each(function(i){
 						this.checked = false;
 				});
+			});
+			$("#statistic").click(function(){
+				var matchIds="";
+				$("input[name='matchId']").each(function(){
+					if($(this).attr("checked")){
+						if(matchIds=="")
+							matchIds+=$(this).val();
+						else
+							matchIds+=","+$(this).val();
+					}
+				});
+				if(matchIds==""){
+					alert("Please select match first!");
+				}else{
+					window.open("/statistic?matchIds="+matchIds);
+				}
 			});
 	});
 </script>
@@ -69,7 +85,7 @@ $(document).ready(function(){
 		</tr>
 		{% for match in list%}
 		<tr>
-			<td><input type="checkbox" name="matchIds"	value="{{match.id}}" /></td>
+			<td><input type="checkbox" name="matchId"	value="{{match.id}}" /></td>
 			<td>{{match.matchdate}}</td>
 			<td>{{match.matchtime}}</td>
 			<td>{{match.lega.name}}</td>

@@ -257,3 +257,23 @@ def goAdminlogin(request):
     c = Context({}) 
     t = loader.get_template('admin_login.htm')
     return HttpResponse(t.render(c))
+
+def statistic(request):
+    matchIds=request.GET['matchIds'].split(",");
+    gamblers=[]
+    for matchId in matchIds:
+        match = Match.objects.get(id=int(matchId)) 
+        bets = Transaction.objects.filter(match=match).order_by('-bettime') 
+        for bet in bets:
+            gambler = bet.gambler
+            if gambler in gamblers:
+                for g in gamblers:
+                    if g.id==gambler.id:
+                        g.balance = g.balance+ int(bet.bet)
+            else:
+                gambler.balance=int(bet.bet)
+                gamblers.append(gambler)
+    c = Context({'gamblers':gamblers}) 
+    t = loader.get_template('statistic.htm')
+    return HttpResponse(t.render(c))
+
