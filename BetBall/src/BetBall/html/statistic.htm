@@ -1,0 +1,53 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<title>vote</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="description" content="Default Description" />
+
+<meta name="robots" content="INDEX,FOLLOW" />
+<script type="text/javascript" src="/image/jquery.min.js"></script>
+<script type="text/javascript">
+
+</script>
+<link rel="stylesheet" type="text/css" href="/image/reset.css"
+	media="all" />
+<link rel="stylesheet" type="text/css" href="/image/styles.css"
+	media="all" />
+<link rel="stylesheet" type="text/css" href="/image/clears.css"
+	media="all" />
+<link rel="stylesheet" type="text/css" href="/image/print.css"
+	media="print" />
+<link rel="stylesheet" type="text/css" href="/image/vote.css" />
+</head>
+<h3 class="h3">Bet statistic</h3>
+<fieldset class="fieldset">
+<div class="votes-table">
+<table>
+	<tbody>
+		<tr class="votes-tr">
+			<th>
+			username
+			</th>
+			<th>
+			name
+			</th>
+			<th>
+			result
+			</th>
+		</tr>
+		{% for gambler in gamblers%}
+        <tr>
+            <td >{{gambler.username}}</td>
+            <td >{{gambler.name}}</td>
+            <td >{{gambler.balance}}</td>
+        </tr>
+        {% endfor%}
+	</tbody>
+</table>
+</div>
+</fieldset>
+</form>
+</div>
+</body>
+</html>
