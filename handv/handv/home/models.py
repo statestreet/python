@@ -21,13 +21,28 @@ class Category(models.Model):
     user = models.ForeignKey(User)
     name = models.CharField(max_length=50)
     desc = models.CharField(max_length=200)
+    type = models.CharField(max_length=2) 
         
 class Article(models.Model):
     user = models.ForeignKey(User)
     category = models.ForeignKey(Category)
     addtime = models.DateTimeField() 
     title = models.CharField(max_length=200)
-    content = models.TextField
+    content = models.TextField(default='')
     state = models.CharField(max_length=2)
     type = models.CharField(max_length=2)
-
+    
+class Comment(models.Model):
+    user = models.ForeignKey(User)
+    article = models.ForeignKey(Article)
+    addtime = models.DateTimeField() 
+    title = models.CharField(max_length=200)
+    content = models.TextField(default='')
+    state = models.CharField(max_length=2)
+    
+class Attachment(models.Model):
+    user = models.ForeignKey(User)
+    article = models.ForeignKey(Article)
+    addtime = models.DateTimeField()
+    filepath = models.CharField(max_length=500)  
+    type = models.CharField(max_length=2) 

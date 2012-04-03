@@ -1,17 +1,17 @@
 body {
 	margin:0px;
-	background:url(../images/foo.jpg) no-repeat center bottom;
+	background:url(/images/foo.jpg) no-repeat center bottom;
 	background-color:#411111;
 	font-family:Verdana,Arial,Helvetica,sans-serif;
 	font-size:12px;
 	overflow-x:hidden;
 }
 #logo, .home, .arch, .cont, .date, .bl, .bar, .cff, h3, h3 span, .more-link, hr, #search, #cats_end, .categories, #rcnt a, .stit, .recp, .recc, .bar2, .fatit, .abt, .twtit, .twitter, .pag_num, .pag_num_act, .prev, .prev_active, .next, .cmt_nu, .pyct, .hbar {
-	background:url(../images/sprite.png) no-repeat;
+	background:url(/images/sprite.png) no-repeat;
 	margin:0px;
 }
 #wrap {
-        background: url(../images/hdr.jpg) center 0px no-repeat;
+        background: url(/images/hdr.jpg) center 0px no-repeat;
         width:100%;
 }
 #hdr {
@@ -22,7 +22,7 @@ body {
 #logo {
 	width:344px;
 	height:69px;
-	background:url(../images/logo.png) no-repeat;
+	background:url(/images/logo.png) no-repeat;
 	position:relative;
 	top:72px;
 	left:76px;
@@ -39,7 +39,7 @@ body {
 	text-align:center;
 }
 .shad {
-	background:url(../images/shadow2.png) no-repeat;
+	background:url(/images/shadow2.png) no-repeat;
 	float:left;
 }
 #menu a {
@@ -114,7 +114,7 @@ body {
 	display:block;
 }
 #cnt {
-	background:url(../images/paper.jpg) repeat-y center 0;
+	background:url(/images/paper.jpg) repeat-y center 0;
 	width:1000px;
 	min-height:782px;
 	margin:0px auto;
@@ -252,7 +252,7 @@ hr {
 	padding:0px;
 }
 #cats {
-	background:url(../images/cats.png) repeat-y;
+	background:url(/images/cats.png) repeat-y;
 	margin:0 0 0 1px;
 	padding:0px;
 	width:314px;

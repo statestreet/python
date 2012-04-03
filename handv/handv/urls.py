@@ -8,6 +8,9 @@ import os
 
 urlpatterns = patterns('',
     (r'^$',  home),  
+    (r'^article/(\w+)/$', article),
+    (r'^articles/', articles),
+    (r'^photos/', photos),
     (r'^css/(?P<path>.*)$', 'django.views.static.serve', {'document_root': os.path.dirname(globals()["__file__"]) + '/html/css'}),
     (r'^images/(?P<path>.*)$', 'django.views.static.serve', {'document_root': os.path.dirname(globals()["__file__"]) + '/html/images'}),
     (r'^js/(?P<path>.*)$', 'django.views.static.serve', {'document_root': os.path.dirname(globals()["__file__"]) + '/html/js'}),
