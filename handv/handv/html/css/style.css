@@ -560,3 +560,8 @@ hr {
 	font-weight:bold;
 	margin:0px;
 }
+
+label{
+	float: left;
+	width: 100px;
+}

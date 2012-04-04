@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+{% include 'head.html' %}
+</head>
+
+<body>
+
+<!-- Wrap div -->
+<div id="wrap">
+
+	{% include 'top.html' %}
+
+	<!-- Main Container -->
+	<div id="cnt" class="pngf">
+
+		<!-- Left Column -->
+		<div id="lcnt">
+			
+			<!-- Post -->
+			<div class="post">
+				
+				<!-- Post Date -->
+				<dl class="date">
+					<dt>
+						<span>15</span>
+					</dt>
+					<dd>
+						<span>January</span>
+					</dd>
+					<dd>
+						<span>2009</span>
+					</dd>
+				</dl>
+				
+				<!-- Post Title - Permalink -->
+				<h3 class="pngf">
+					<a href="#">发表文章/图片</a><br />
+
+					<!-- Post Details -->
+					<span class="pngf">Posted in graphics</span>
+				</h3>
+			</div>
+			<div id="comments">
+			
+				<!-- Comment Form -->
+				<form action="/addArticle/" method="post" id="cmntfrm">
+					<div id="cmntfs">
+						<div class="pyct pngf"></div>
+
+						<p><input type="text" name="author" size="22" tabindex="1" id="title"/><label>标题 <span>(required)</span></label></p>
+						<p><input type="text" name="email" size="22" tabindex="2" id="desc"/><label>描述 <span>(required)</span></label></p>
+						<p>
+							<textarea name="content" cols="55" rows="10" tabindex="4" id="content"></textarea>
+						</p>
+						<p>
+							<input type="submit" name="submit" value="Post" tabindex="5" id="submit"/>
+						</p>
+					</div>
+				</form>
+
+
+			</div>
+
+		</div>
+
+		{% include 'right.html' %}
+
+        <br style="clear:both;"/>
+
+	</div>
+
+</div>
+
+{% include 'footer.html' %}
+</body>
+</html>

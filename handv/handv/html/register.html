@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+{% include 'head.html' %}
+</head>
+<body>
+
+<!-- Wrap div -->
+<div id="wrap">
+
+	{% include 'top.html' %}
+
+	<!-- Main Container -->
+	<div id="cnt" class="pngf">
+
+		<!-- Left Column -->
+		<div id="lcnt">
+			
+			<!-- Post -->
+			<div class="post">
+				
+				<!-- Post Title - Permalink -->
+				<h3 class="pngf">
+					<a href="#">一休和老刘的朋友注册</a><br />
+				</h3>
+			<br style="clear:both;"/>
+				<!-- Post Content -->
+				<form method="post" name="form1" action="/doRegister/">		
+				<p>
+					<label>用户名：</label><input type="text" name="username"><br style="clear:both;"/>
+					<label>姓名：</label><input type="text" name="name"><br style="clear:both;"/>
+					<label>email：</label><input type="text" name="email"><br style="clear:both;"/>
+					<label>密码：</label><input type="password" name="password"><br style="clear:both;"/>
+					<label>密码确认：</label><input type="password" name="password1"><br style="clear:both;"/>
+					<button type="submit">注册</button>
+				</p>
+				</form>
+			</div>
+		</div>
+		<br style="clear:both;"/>
+
+	</div>
+
+</div>
+
+{% include 'footer.html' %}
+
+
+</body>
+</html>
