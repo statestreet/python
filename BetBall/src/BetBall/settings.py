@@ -80,6 +80,7 @@ PROJECT_PATH = os.path.dirname(os.path.realpath(__file__))
 
 TEMPLATE_DIRS = (os.path.join(PROJECT_PATH, './html'),)
 
+SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
 
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.auth.context_processors.auth',
