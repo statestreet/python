@@ -4,7 +4,7 @@ from BetBall.bet.votepage import goNewVotePage, saveOrUpdateVote, votes, \
     voteVote, vote, myVotes, viewVote, delVote, goEditVote, isVoted, voteDetail, \
     delVoter
 from BetBall.bet.weibopage import *
-from django.conf.urls.defaults import *
+from django.conf.urls import patterns, url, include
 import os
 import settings
 

@@ -117,7 +117,7 @@ def voteVote(request,args = {}):
     return HttpResponse("error")
 
 @adminInterceptor
-@transaction.commit_on_success  
+#@transaction.commit_on_success  
 def saveOrUpdateVote(request):
     result = 'success'
     voteMap = {}
@@ -164,7 +164,7 @@ def saveOrUpdateVote(request):
     return HttpResponse(template.render(context))
 
 @interceptor
-@transaction.commit_on_success  
+#@transaction.commit_on_success  
 def vote(request):
     id = 'id' in request.POST and request.POST['id'] or 'id' in request.GET and request.GET['id']
     if not id :
@@ -213,7 +213,7 @@ def viewVote(request):
     return HttpResponse(template.render(context))
 
 @adminInterceptor
-@transaction.commit_on_success  
+#@transaction.commit_on_success  
 def delVote(request):
     result = ''
     gambler = 'gambler' in request.session and request.session['gambler']
